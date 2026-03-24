@@ -1,0 +1,84 @@
+{
+  // === Editor ===
+  "editor.tabSize": 2,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "editor.wordWrap": "on",
+  "editor.wrappingIndent": "indent",
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": true,
+  "editor.wordSegmenterLocales": ["ja"],
+
+  // === Language-specific formatters ===
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // === TypeScript / JavaScript ===
+  "js/ts.updateImportsOnFileMove.enabled": "always",
+
+  // === Files ===
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.trimTrailingWhitespace": true,
+  "files.autoGuessEncoding": true,
+  "files.candidateGuessEncodings": ["utf8", "shiftjis", "eucjp"],
+
+  // === Explorer ===
+  "explorer.compactFolders": false,
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "explorer.excludeGitIgnore": true,
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.expand": false,
+
+  // === Git ===
+  "git.autofetch": "all",
+  "git.confirmSync": false,
+  "git.pruneOnFetch": true,
+  "git.suggestSmartCommit": false,
+  "git.openRepositoryInParentFolders": "never",
+
+  // === Diff ===
+  "diffEditor.ignoreTrimWhitespace": false,
+
+  // === Markdownlint ===
+  "markdownlint.config": {
+    "default": true,
+    "MD001": false,
+    "MD004": false,
+    "MD007": false,
+    "MD022": false,
+    "MD024": false,
+    "MD026": false,
+    "MD029": false,
+    "MD031": false,
+    "MD032": false,
+    "MD033": false,
+    "MD036": false,
+    "MD045": false,
+    "MD047": false,
+    "MD060": false
+  },
+
+  // === Misc ===
+  "dbmlERDPreviewer.preferredTheme": "light",
+  "workbench.colorTheme": "One Dark Pro"
+}

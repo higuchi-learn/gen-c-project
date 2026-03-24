@@ -1,0 +1,51 @@
+{
+  "recommendations": [
+    // --- Formatter / Linter ---
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "editorconfig.editorconfig",
+
+    // --- TypeScript / React ---
+    "yoavbls.pretty-ts-errors",
+    "usernamehw.errorlens",
+    "burkeholland.simple-react-snippets",
+    "dsznajder.es7-react-js-snippets",
+    "formulahendry.auto-rename-tag",
+
+    // --- Path ---
+    "christian-kohler.path-intellisense",
+    "ionutvmi.path-autocomplete",
+
+    // --- Git ---
+    "mhutchie.git-graph",
+    "github.vscode-pull-request-github",
+    "donjayamanne.githistory",
+
+    // --- API testing ---
+    "humao.rest-client",
+
+    // --- Documentation (Markdown) ---
+    "yzhang.markdown-all-in-one",
+    "davidanson.vscode-markdownlint",
+    "darkriszty.markdown-table-prettify",
+
+    // --- DB Design ---
+    "bocovo.dbml-erd-visualizer",
+    "matt-meyers.vscode-dbml",
+    "duynvu.dbml-language",
+
+    // --- Diagram ---
+    "hediet.vscode-drawio",
+    "corschenzi.mermaid-graphical-editor",
+
+    // --- Editor utilities ---
+    "oderwat.indent-rainbow",
+    "mosapride.zenkaku",
+    "shardulm94.trailing-spaces",
+    "wayou.vscode-todo-highlight",
+    "streetsidesoftware.code-spell-checker",
+
+    // --- Claude Code ---
+    "anthropic.claude-code"
+  ]
+}
