@@ -1,0 +1,59 @@
+// --- ユーザ ---
+Table users {
+  id uuid [primary key]
+  username varchar [note: 'ログインID']
+  display_name varchar [note: '表示名']
+  icon_image varchar [note: 'アイコン画像URL']
+  residence varchar [note: '居住地']
+  created_at timestamp
+
+  note: 'アカウント情報・編集画面の項目'
+}
+
+// --- スポット ---
+Table spots {
+  id integer [primary key, increment]
+  user_id integer [ref: > users.id, note: '投稿者ID（ゲスト投稿ならNULL）']
+  name varchar [note: 'スポットの名前']
+  description text [note: '説明']
+  lat decimal [note: '緯度']
+  lng decimal [note: '経度']
+  image_url varchar [note: '写真URL']
+  created_at timestamp
+  updated_at timestamp
+  note: 'マップ上に立てるピンと情報管理'
+}
+
+// --- アクション ---
+
+Table spot_visits {
+
+  user_id integer [ref: > users.id]
+  spot_id integer [ref: > spots.id]
+  created_at timestamp
+  indexes {
+    (user_id, spot_id) [pk]
+  }
+  note: '訪問済か否か管理'
+}
+// ---以下余裕があれば---
+Table likes {
+  user_id integer [ref: > users.id, note: 'いいね数不正対策']
+  spot_id integer [ref: > spots.id]
+  created_at timestamp
+
+  indexes {
+    (user_id, spot_id) [pk]
+  }
+  note: 'いいね管理'
+}
+
+Table comments {
+  id integer [primary key]
+  user_id integer [ref: > users.id]
+  spot_id integer [ref: > spots.id]
+  content text
+  created_at timestamp
+
+  note: 'コメント管理'
+}
