@@ -1,10 +1,8 @@
 // --- ユーザ ---
 Table users {
-  id integer [primary key]
+  id uuid [primary key]
   username varchar [note: 'ログインID']
   display_name varchar [note: '表示名']
-  email varchar [unique]
-  password varchar
   icon_image varchar [note: 'アイコン画像URL']
   residence varchar [note: '居住地']
   created_at timestamp
@@ -23,21 +21,22 @@ Table spots {
   image_url varchar [note: '写真URL']
   created_at timestamp
   updated_at timestamp
-
   note: 'マップ上に立てるピンと情報管理'
 }
 
 // --- アクション ---
 
 Table spot_visits {
-  id integer [primary key]
+
   user_id integer [ref: > users.id]
   spot_id integer [ref: > spots.id]
   created_at timestamp
-
-  note: '発見した数の管理'
+  indexes {
+    (user_id, spot_id) [pk]
+  }
+  note: '訪問済か否か管理'
 }
-
+// ---以下余裕があれば---
 Table likes {
   user_id integer [ref: > users.id, note: 'いいね数不正対策']
   spot_id integer [ref: > spots.id]
