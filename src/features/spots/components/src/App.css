@@ -1,0 +1,104 @@
+.bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border-radius: 24px 24px 0 0;
+  padding: 0px 20px 20px 20px;
+  box-sizing: border-box;
+  box-shadow: 0 -4px 16px rgba(0,0,0,0.1);
+}
+
+.buttonArea{
+  background: transparent;
+  width: 100%;
+  border: 0;
+  padding: 10px;
+  font: inherit;
+  color: inherit;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+
+.handle {
+  width: 40px;
+  height: 6px;
+  background: #ddd;
+  border-radius: 3px;
+  margin: 0 auto 10px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 10px;
+  gap:7px;
+}
+
+.title {
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 1;
+  margin: 3px;
+}
+
+.close-btn {
+  background: #d5d5d5;
+  border: none;
+  font: inherit;
+  color: inherit;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+}
+
+.icons-row {
+  display: flex;
+  justify-content: space-around;
+}
+
+.icon-item {
+  text-align: center;
+  font-size: 18px;
+}
+
+.icon {
+  display: block;
+  width:50px;
+  height:50px;
+}
+
+.info .row {
+  margin: 10px 0;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon-info{
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+}
+
+.text{
+  font-size: 18px;
+  line-height: 1.3;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.img{
+  width: 100%;
+  height: 262px;
+  background: #d5d5d5;
+  border-radius: 10px;
+  margin-top: 10px;
+}
