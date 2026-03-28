@@ -48,7 +48,16 @@ function ProfileSetupPage() {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', backgroundColor: '#e0f2fe' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+        backgroundColor: '#e0f2fe',
+      }}
+    >
       <h1 style={{ fontSize: '28px', marginBottom: '20px', fontWeight: 'bold' }}>プロフィール設定</h1>
       <Card>
         <form onSubmit={handleUpdate} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
@@ -72,7 +81,7 @@ function ProfileSetupPage() {
             onChange={(e) => setResidence(e.target.value)}
           />
 
-          <Button type="submit" disabled={loading} style={{ marginTop: "10px" }}>
+          <Button type="submit" disabled={loading} style={{ marginTop: '10px' }}>
             {loading ? '保存中...' : '確定してはじめる'}
           </Button>
         </form>

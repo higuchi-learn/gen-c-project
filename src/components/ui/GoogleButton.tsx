@@ -32,14 +32,10 @@ export const GoogleButton = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: '10px'
+        gap: '10px',
       }}
     >
-      <img
-        src="https://www.google.com/favicon.ico"
-        alt="Google"
-        style={{ width: '18px', height: '18px' }}
-      />
+      <img src="https://www.google.com/favicon.ico" alt="Google" style={{ width: '18px', height: '18px' }} />
       Googleでログイン
     </Button>
   );
