@@ -17,12 +17,14 @@ export function useSpots() {
   useEffect(() => {
     // Supabaseからスポットデータを取得する非同期関数
     const fetchSpots = async () => {
-      const { data, error } = await supabase.from('spots').select('id, name, description, lat, lng');
+      const { data, error }: { data: SpotMarker[] | null; error: { message: string } | null } = await supabase
+        .from('spots')
+        .select('id, name, description, lat, lng');
       // エラーがあればエラーメッセージをセットし、そうでなければスポットデータをセットする
       if (error) {
         setError(error.message);
       } else {
-        setSpots((data as SpotMarker[] | null) ?? []);
+        setSpots(data ?? []);
       }
       // データの取得が完了したら, ローディング状態をfalseにする
       setLoading(false);

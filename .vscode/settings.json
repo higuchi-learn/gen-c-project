@@ -57,7 +57,7 @@
   "git.openRepositoryInParentFolders": "never",
 
   // === Diff ===
-  "diffEditor.ignoreTrimWhitespace": false,
+  "diffEditor.ignoreTrimWhitespace": true,
 
   // === Markdownlint ===
   "markdownlint.config": {
