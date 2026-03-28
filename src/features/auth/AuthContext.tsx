@@ -56,10 +56,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
       }
 
-      // サインアウトしたときはログイン画面へ遷移
-      if (event === 'SIGNED_OUT') {
-        void navigate({ to: '/login' });
-      }
     });
     // useEffect再実行時にクリーンアップ関数でサブスクリプションを解除
     // subscriptionは「この監視を止めてください」という Supabase の API から返されるオブジェクト
