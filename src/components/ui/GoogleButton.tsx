@@ -23,7 +23,7 @@ export const GoogleButton = () => {
   return (
     <Button
       type="button"
-      onClick={handleGoogleLogin}
+      onClick={() => void handleGoogleLogin()}
       style={{
         backgroundColor: '#fff',
         color: '#757575',

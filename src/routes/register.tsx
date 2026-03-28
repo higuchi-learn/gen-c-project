@@ -34,14 +34,14 @@ function RegisterPage() {
       } else {
         alert('登録が完了しました！');
       }
-      navigate({ to: '/login' });
+      void navigate({ to: '/login' });
     }
     setLoading(false);
   };
 
   return (
     <AuthLayout title="新規登録">
-      <form onSubmit={handleSignUp}>
+      <form onSubmit={(e) => void handleSignUp(e)}>
         <Input
           label="メールアドレス"
           type="email"
@@ -65,7 +65,7 @@ function RegisterPage() {
             {loading ? '登録中...' : 'アカウントを作成する'}
           </Button>
 
-          <Button type="button" variant="primary" onClick={() => navigate({ to: '/login' })}>
+          <Button type="button" variant="primary" onClick={() => void navigate({ to: '/login' })}>
             ログイン画面に戻る
           </Button>
         </div>

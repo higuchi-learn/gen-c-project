@@ -18,7 +18,7 @@ function ProfileSetupPage() {
 
   // 画面が開いたときに現在のユーザーIDを取得
   useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
+    void supabase.auth.getUser().then(({ data: { user } }) => {
       if (user) setUserId(user.id);
     });
   }, []);
@@ -43,7 +43,7 @@ function ProfileSetupPage() {
       alert('エラー: ' + error.message);
     } else {
       alert('プロフィールを登録しました！');
-      navigate({ to: '/' }); // メイン画面（地図）へ
+      void navigate({ to: '/' }); // メイン画面（地図）へ
     }
   };
 
@@ -60,7 +60,7 @@ function ProfileSetupPage() {
     >
       <h1 style={{ fontSize: '28px', marginBottom: '20px', fontWeight: 'bold' }}>プロフィール設定</h1>
       <Card>
-        <form onSubmit={handleUpdate} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+        <form onSubmit={(e) => void handleUpdate(e)} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
           <p style={{ fontSize: '13px', color: '#666', marginBottom: '10px' }}>
             アプリで使うユーザーネームを登録してください。
           </p>

@@ -37,7 +37,7 @@ function ResetPasswordPage() {
     <AuthLayout title="再設定">
       {!isSent ? (
         // 送信前のフォーム
-        <form onSubmit={handleResetPassword}>
+        <form onSubmit={(e) => void handleResetPassword(e)}>
           <p style={{ fontSize: '13px', color: '#666', marginBottom: '20px', textAlign: 'center' }}>
             登録済みのメールアドレスを入力してください。
           </p>
@@ -56,7 +56,7 @@ function ResetPasswordPage() {
               {loading ? '送信中...' : '再設定メールを送る'}
             </Button>
 
-            <Button type="button" variant="secondary" onClick={() => navigate({ to: '/login' })}>
+            <Button type="button" variant="secondary" onClick={() => void navigate({ to: '/login' })}>
               キャンセル
             </Button>
           </div>
@@ -65,10 +65,11 @@ function ResetPasswordPage() {
         // 送信後のメッセージ
         <div style={{ textAlign: 'center' }}>
           <p style={{ fontSize: '15px', color: '#333', marginBottom: '20px' }}>
-            メールを送信しました！<br />
+            メールを送信しました！
+            <br />
             届いたメール内のリンクをクリックしてパスワードを変更してください。
           </p>
-          <Button type="button" onClick={() => navigate({ to: '/login' })}>
+          <Button type="button" onClick={() => void navigate({ to: '/login' })}>
             ログイン画面に戻る
           </Button>
         </div>

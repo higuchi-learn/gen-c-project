@@ -19,27 +19,37 @@ function LoginPage() {
     e.preventDefault();
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) alert(error.message);
-    else navigate({ to: '/' });
+    else void navigate({ to: '/' });
   };
 
   return (
     <AuthLayout title="Sign in">
-      <form onSubmit={handleLogin}>
-        <Input label="メールアドレス" type="email" value={email} onChange={(e)=>setEmail(e.target.value)} required />
-        <Input label="パスワード" type="password" value={password} onChange={(e)=>setPassword(e.target.value)} required />
+      <form onSubmit={(e) => void handleLogin(e)}>
+        <Input label="メールアドレス" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <Input
+          label="パスワード"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
 
-        <Button type="submit" style={{ marginBottom: '12px' }}>メールでログインする</Button>
+        <Button type="submit" style={{ marginBottom: '12px' }}>
+          メールでログインする
+        </Button>
 
         {/* ここにGoogleボタンを配置！ */}
         <GoogleButton />
 
         <div style={{ margin: '20px 0', borderBottom: '1px solid #ddd' }}></div>
 
-        <Button type="button" variant="secondary" onClick={() => navigate({ to: '/register' as any })}>
+        <Button type="button" variant="secondary" onClick={() => void navigate({ to: '/register' as any })}>
           新規登録
         </Button>
         <div style={{ textAlign: 'center', marginTop: '16px' }}>
-          <Link to="/reset-password" style={{ fontSize: '13px', color: '#6366f1' }}>お忘れですか？</Link>
+          <Link to="/reset-password" style={{ fontSize: '13px', color: '#6366f1' }}>
+            お忘れですか？
+          </Link>
         </div>
       </form>
     </AuthLayout>
