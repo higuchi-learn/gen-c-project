@@ -1,11 +1,11 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
-import { supabase } from '../../../lib/supabase';
-import { Button } from '../../../components/ui/Button';
-import { Input } from '../../../components/ui/Input';
-import { Card } from '../../../components/ui/Card';
+import { supabase } from '../lib/supabase';
+import { Button } from '../components/ui/Button';
+import { Input } from '../components/ui/Input';
+import { Card } from '../components/ui/Card';
 
-export const Route = createFileRoute('/src/routes/profile-setup')({
+export const Route = createFileRoute('/profile-setup')({
   component: ProfileSetupPage,
 });
 
@@ -16,15 +16,18 @@ function ProfileSetupPage() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // 画面が開いたときに現在のユーザーIDを取得
+  // 初回レンダリング時に現在のユーザーIDを取得
+  // これがないと、プロフィール設定ページでユーザーIDがわからず、usersテーブルの更新ができない
   useEffect(() => {
     void supabase.auth.getUser().then(({ data: { user } }) => {
       if (user) setUserId(user.id);
     });
   }, []);
 
-  const handleUpdate = async (e: React.FormEvent) => {
+  const handleUpdate = async (e: React.SyntheticEvent) => {
+    // フォームのデフォルトの送信動作をキャンセル
     e.preventDefault();
+    // ユーザーIDがない場合は処理を中断
     if (!userId) return;
     setLoading(true);
 
@@ -39,11 +42,12 @@ function ProfileSetupPage() {
 
     setLoading(false);
 
+    // エラーがあればアラートで表示、なければ成功メッセージを表示してトップページへ遷移
     if (error) {
       alert('エラー: ' + error.message);
     } else {
       alert('プロフィールを登録しました！');
-      void navigate({ to: '/' }); // メイン画面（地図）へ
+      void navigate({ to: '/' });
     }
   };
 

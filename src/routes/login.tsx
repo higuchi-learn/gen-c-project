@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, Link } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { Button } from '../components/ui/Button';
@@ -11,15 +11,13 @@ export const Route = createFileRoute('/login')({
 });
 
 function LoginPage() {
-  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) alert(error.message);
-    else void navigate({ to: '/' });
   };
 
   return (
@@ -43,9 +41,11 @@ function LoginPage() {
 
         <div style={{ margin: '20px 0', borderBottom: '1px solid #ddd' }}></div>
 
-        <Button type="button" variant="secondary" onClick={() => void navigate({ to: '/register' as any })}>
-          新規登録
-        </Button>
+        <Link to="/register">
+          <Button type="button" variant="secondary">
+            新規登録
+          </Button>
+        </Link>
         <div style={{ textAlign: 'center', marginTop: '16px' }}>
           <Link to="/reset-password" style={{ fontSize: '13px', color: '#6366f1' }}>
             お忘れですか？
