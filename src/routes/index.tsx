@@ -1,9 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
-
+import { SpotDetail } from '../features/spots/components/SpotDetail';
 export const Route = createFileRoute('/')({
   component: IndexPage,
 });
 
 function IndexPage() {
-  return <div>マップ画面（MAP-01〜06）</div>;
+  return <SpotDetail/>;
 }
