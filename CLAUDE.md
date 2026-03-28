@@ -22,12 +22,30 @@
 
 ---
 
+## 型・データアクセス
+
+- DBのテーブル型は `src/types/database.types.ts` に自動生成済み（Supabase CLIで生成）
+- 各テーブルの型エイリアスは `src/types/index.ts` に定義済み
+- コードを書く際は必ず `src/types/index.ts` の定義済み型を使用すること（独自に型を定義しない）
+- Supabaseクライアントは `src/lib/supabase.ts` からインポートする
+- CRUD操作の例は `documents/supabase-crud-guide.md` を参照
+
+| 型名 | 対応テーブル | 用途 |
+|------|-------------|------|
+| `Spot` / `SpotInsert` / `SpotUpdate` | `spots` | スポット |
+| `Comment` / `CommentInsert` / `CommentUpdate` | `comments` | コメント |
+| `Discovery` / `DiscoveryInsert` | `discoveries` | 発見記録 |
+| `Achievement` / `AchievementInsert` | `achievements` | アチーブメント |
+
+---
+
 ## ドキュメント構成
 
 | ファイル | 役割 |
 |----------|------|
 | `観光地共有サービス(仮).md` | 草書案（原本） |
 | `観光地共有サービス(仮)_添削.md` | 機能の添削・優先度整理（随時更新） |
+| `supabase-crud-guide.md` | Supabase CRUD操作の実装例 |
 
 ---
 
