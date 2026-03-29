@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { ChangeEvent } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { supabase } from '../../../lib/supabase';
 import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
 import { useSpotRegistration } from '../hooks/useSpotRegistration';
+import { reverseGeocode } from '../../../utils/reverseGeocode';
 import styles from './SpotRegistrationForm.module.css';
 
 // スポットの登録に必要なデータの型定義
@@ -25,6 +26,13 @@ export function SpotRegistrationForm({ lat, lng, userId }: SpotRegistrationFormP
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  // 逆ジオコーディングで取得した住所（都道府県 + 市区町村）
+  const [address, setAddress] = useState<string | null>(null);
+
+  // コンポーネントマウント時に座標から住所を取得する
+  useEffect(() => {
+    void reverseGeocode(lat, lng).then(setAddress);
+  }, [lat, lng]);
 
   // 画像ファイルが選択されたときの処理
   const handleImageUpload = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -71,6 +79,9 @@ export function SpotRegistrationForm({ lat, lng, userId }: SpotRegistrationFormP
       image_url: imageUrl,
       lat,
       lng,
+      // PostGIS geography型として保存（経度が先、緯度が後）
+      location: `POINT(${lng} ${lat})`,
+      address,
       user_id: userId,
     });
 
