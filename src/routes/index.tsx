@@ -1,10 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { MapView } from '../features/map/components/MapView';
+import { Footer } from '../components/layout/Footer';
 
 export const Route = createFileRoute('/')({
   component: IndexPage,
 });
 
 function IndexPage() {
-  return <MapView />;
+  return <Footer />;
 }
