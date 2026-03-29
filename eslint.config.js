@@ -10,7 +10,15 @@ import tslint from 'typescript-eslint';
 
 export default defineConfig(
   {
-    ignores: ['eslint.config.mjs', 'src/api.types.gen.ts', 'src/routeTree.gen.ts', 'dist/**'],
+    ignores: [
+      'eslint.config.js',
+      'eslint.config.mjs',
+      'src/api.types.gen.ts',
+      'src/routeTree.gen.ts',
+      'src/types/database.types.ts',
+      'supabase/**',
+      'dist/**',
+    ],
   },
   eslint.configs.recommended,
   ...tslint.configs.recommendedTypeChecked,
@@ -36,6 +44,15 @@ export default defineConfig(
       '@typescript-eslint/no-floating-promises': 'warn',
       '@typescript-eslint/no-unsafe-argument': 'warn',
       'prettier/prettier': ['error', { endOfLine: 'lf' }],
+    },
+  },
+  {
+    // Story ファイルはテスト用途のため unsafe 系ルールを緩和
+    files: ['src/stories/**'],
+    rules: {
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-assignment': 'off',
     },
   },
 );
