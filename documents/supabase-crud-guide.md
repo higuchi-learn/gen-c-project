@@ -30,11 +30,7 @@ const spots: Spot[] = data;
 ### READ: 1件取得
 
 ```ts
-const { data, error } = await supabase
-  .from('spots')
-  .select('*')
-  .eq('id', spotId)
-  .single();
+const { data, error } = await supabase.from('spots').select('*').eq('id', spotId).single();
 
 const spot: Spot = data;
 ```
@@ -50,11 +46,7 @@ const newSpot: SpotInsert = {
   user_id: 'ユーザーID',
 };
 
-const { data, error } = await supabase
-  .from('spots')
-  .insert(newSpot)
-  .select()
-  .single();
+const { data, error } = await supabase.from('spots').insert(newSpot).select().single();
 
 const spot: Spot = data;
 ```
@@ -67,21 +59,13 @@ const updates: SpotUpdate = {
   description: '新しい説明',
 };
 
-const { data, error } = await supabase
-  .from('spots')
-  .update(updates)
-  .eq('id', spotId)
-  .select()
-  .single();
+const { data, error } = await supabase.from('spots').update(updates).eq('id', spotId).select().single();
 ```
 
 ### DELETE: 削除
 
 ```ts
-const { error } = await supabase
-  .from('spots')
-  .delete()
-  .eq('id', spotId);
+const { error } = await supabase.from('spots').delete().eq('id', spotId);
 ```
 
 ---
@@ -109,20 +93,13 @@ const newComment: CommentInsert = {
   user_id: userId,
 };
 
-const { data, error } = await supabase
-  .from('comments')
-  .insert(newComment)
-  .select()
-  .single();
+const { data, error } = await supabase.from('comments').insert(newComment).select().single();
 ```
 
 ### DELETE: コメント削除
 
 ```ts
-const { error } = await supabase
-  .from('comments')
-  .delete()
-  .eq('id', commentId);
+const { error } = await supabase.from('comments').delete().eq('id', commentId);
 ```
 
 ---
@@ -132,10 +109,7 @@ const { error } = await supabase
 ### READ: ユーザーの発見済みスポット一覧
 
 ```ts
-const { data, error } = await supabase
-  .from('discoveries')
-  .select('*')
-  .eq('user_id', userId);
+const { data, error } = await supabase.from('discoveries').select('*').eq('user_id', userId);
 ```
 
 ### CREATE: 発見を記録

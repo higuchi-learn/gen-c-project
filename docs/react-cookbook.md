@@ -37,10 +37,10 @@
 ```tsx
 function MyComponent() {
   const handleClick = () => {
-    console.log('押された')
-  }
+    console.log('押された');
+  };
 
-  return <button onClick={handleClick}>押す</button>
+  return <button onClick={handleClick}>押す</button>;
 }
 ```
 
@@ -59,19 +59,19 @@ function MyComponent() {
 ## テキストボックスの入力値を使いたい
 
 ```tsx
-import { useState } from 'react'
+import { useState } from 'react';
 
 function SpotNameInput() {
-  const [name, setName] = useState('')  // 入力値を state で管理
+  const [name, setName] = useState(''); // 入力値を state で管理
 
   return (
     <input
       type="text"
       value={name}
-      onChange={(e) => setName(e.target.value)}  // e.target.value が入力値
+      onChange={(e) => setName(e.target.value)} // e.target.value が入力値
       placeholder="スポット名"
     />
-  )
+  );
 }
 ```
 
@@ -79,15 +79,15 @@ function SpotNameInput() {
 
 ```tsx
 function SpotForm() {
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
 
   return (
     <form>
       <input value={name} onChange={(e) => setName(e.target.value)} placeholder="名前" />
       <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="説明" />
     </form>
-  )
+  );
 }
 ```
 
@@ -98,33 +98,33 @@ function SpotForm() {
 **鉄板パターン。毎回このテンプレをコピペして使う。**
 
 ```tsx
-import { useState, useEffect } from 'react'
-import { supabase } from '@/lib/supabase'
+import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
 
 function SpotList() {
-  const [spots, setSpots] = useState([])        // データの入れ物
-  const [loading, setLoading] = useState(true)  // 読み込み中フラグ
-  const [error, setError] = useState(null)      // エラーの入れ物
+  const [spots, setSpots] = useState([]); // データの入れ物
+  const [loading, setLoading] = useState(true); // 読み込み中フラグ
+  const [error, setError] = useState(null); // エラーの入れ物
 
   useEffect(() => {
     // useEffect の中で async を直接使えないので、関数を作って呼ぶ
     async function fetchData() {
       try {
-        const { data, error } = await supabase.from('spots').select('*')
-        if (error) throw error
-        setSpots(data)
+        const { data, error } = await supabase.from('spots').select('*');
+        if (error) throw error;
+        setSpots(data);
       } catch (err) {
-        setError('データの取得に失敗しました')
+        setError('データの取得に失敗しました');
       } finally {
-        setLoading(false)  // 成功でも失敗でも必ず false にする
+        setLoading(false); // 成功でも失敗でも必ず false にする
       }
     }
 
-    fetchData()
-  }, [])  // [] = 画面が表示されたときに1回だけ実行
+    fetchData();
+  }, []); // [] = 画面が表示されたときに1回だけ実行
 
-  if (loading) return <div>読み込み中...</div>
-  if (error)   return <div>{error}</div>
+  if (loading) return <div>読み込み中...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <ul>
@@ -132,7 +132,7 @@ function SpotList() {
         <li key={spot.id}>{spot.name}</li>
       ))}
     </ul>
-  )
+  );
 }
 ```
 
@@ -144,12 +144,12 @@ useEffect(() => {
     const { data } = await supabase
       .from('spots')
       .select('*')
-      .eq('id', spotId)   // id が spotId と等しいものだけ
-      .single()           // 1件だけ取得
-    setSpot(data)
+      .eq('id', spotId) // id が spotId と等しいものだけ
+      .single(); // 1件だけ取得
+    setSpot(data);
   }
-  fetchData()
-}, [spotId])  // spotId が変わったら再取得
+  fetchData();
+}, [spotId]); // spotId が変わったら再取得
 ```
 
 ---
@@ -158,19 +158,19 @@ useEffect(() => {
 
 ```tsx
 function Page() {
-  const [data, setData] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // ... データ取得処理
 
   // 上から順に判定して、条件に合ったら return する
-  if (loading) return <div>読み込み中...</div>
-  if (error)   return <div>エラー: {error}</div>
-  if (!data)   return <div>データがありません</div>
+  if (loading) return <div>読み込み中...</div>;
+  if (error) return <div>エラー: {error}</div>;
+  if (!data) return <div>データがありません</div>;
 
   // ここに来たら data は確実に存在する
-  return <div>{data.name}</div>
+  return <div>{data.name}</div>;
 }
 ```
 
@@ -181,31 +181,37 @@ function Page() {
 **どちらかを表示（三項演算子）:**
 
 ```tsx
-{user ? (
-  <button onClick={signOut}>ログアウト</button>
-) : (
-  <a href="/login">ログイン</a>
-)}
+{
+  user ? <button onClick={signOut}>ログアウト</button> : <a href="/login">ログイン</a>;
+}
 ```
 
 **条件が true のときだけ表示（&& 演算子）:**
 
 ```tsx
 // 現地にいるときだけコメント欄を表示
-{isNearby && <CommentSection />}
+{
+  isNearby && <CommentSection />;
+}
 
 // ローディング中だけスピナーを表示
-{loading && <Spinner />}
+{
+  loading && <Spinner />;
+}
 ```
 
 **注意: 0 は表示されてしまう**
 
 ```tsx
 // NG: spots.length が 0 のとき、"0" が画面に表示される
-{spots.length && <SpotList spots={spots} />}
+{
+  spots.length && <SpotList spots={spots} />;
+}
 
 // OK: 明示的に boolean にする
-{spots.length > 0 && <SpotList spots={spots} />}
+{
+  spots.length > 0 && <SpotList spots={spots} />;
+}
 ```
 
 ---
@@ -224,7 +230,7 @@ function SpotList({ spots }) {
         </li>
       ))}
     </ul>
-  )
+  );
 }
 ```
 
@@ -233,23 +239,26 @@ function SpotList({ spots }) {
 ```tsx
 function SpotList({ spots }) {
   if (spots.length === 0) {
-    return <p>スポットがまだありません</p>
+    return <p>スポットがまだありません</p>;
   }
 
   return (
     <ul>
-      {spots.map((spot) => <li key={spot.id}>{spot.name}</li>)}
+      {spots.map((spot) => (
+        <li key={spot.id}>{spot.name}</li>
+      ))}
     </ul>
-  )
+  );
 }
 ```
 
 フィルタリングしてから表示:
 
 ```tsx
-{spots
-  .filter((spot) => spot.category === 'food')  // 絞り込み
-  .map((spot) => <SpotCard key={spot.id} spot={spot} />)
+{
+  spots
+    .filter((spot) => spot.category === 'food') // 絞り込み
+    .map((spot) => <SpotCard key={spot.id} spot={spot} />);
 }
 ```
 
@@ -274,17 +283,17 @@ import { Link } from '@tanstack/react-router'
 **コードから遷移（ボタン押下後・送信後など）:**
 
 ```tsx
-import { useNavigate } from '@tanstack/react-router'
+import { useNavigate } from '@tanstack/react-router';
 
 function LoginPage() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
-    await supabase.auth.signInWithPassword({ email, password })
-    navigate({ to: '/' })  // ログイン成功後にトップへ
-  }
+    await supabase.auth.signInWithPassword({ email, password });
+    navigate({ to: '/' }); // ログイン成功後にトップへ
+  };
 
-  return <button onClick={handleLogin}>ログイン</button>
+  return <button onClick={handleLogin}>ログイン</button>;
 }
 ```
 
@@ -297,12 +306,16 @@ function LoginPage() {
 ```tsx
 // src/routes/spots/$spotId.tsx
 function SpotDetailPage() {
-  const { spotId } = Route.useParams()  // "abc123" が取れる
+  const { spotId } = Route.useParams(); // "abc123" が取れる
 
   useEffect(() => {
-    supabase.from('spots').select('*').eq('id', spotId).single()
-      .then(({ data }) => setSpot(data))
-  }, [spotId])
+    supabase
+      .from('spots')
+      .select('*')
+      .eq('id', spotId)
+      .single()
+      .then(({ data }) => setSpot(data));
+  }, [spotId]);
 }
 ```
 
@@ -311,46 +324,50 @@ function SpotDetailPage() {
 ## ログイン状態を取得したい
 
 ```tsx
-import { useAuth } from '@/features/auth/AuthContext'
+import { useAuth } from '@/features/auth/AuthContext';
 
 function SomeComponent() {
-  const { user, loading } = useAuth()
+  const { user, loading } = useAuth();
 
-  if (loading) return null  // 認証確認中は何も表示しない
+  if (loading) return null; // 認証確認中は何も表示しない
 
   if (!user) {
-    return <p>ログインしてください</p>
+    return <p>ログインしてください</p>;
   }
 
-  return <p>ようこそ {user.email} さん</p>
+  return <p>ようこそ {user.email} さん</p>;
 }
 ```
 
 **`useAuth` で取得できるもの:**
 
-| 変数 | 内容 |
-|------|------|
-| `user` | ログイン中のユーザー（未ログインは `null`） |
-| `user.id` | ユーザーID（DBに保存するときに使う） |
-| `user.email` | メールアドレス |
-| `loading` | 認証状態を確認中かどうか |
-| `signOut` | ログアウトする関数 |
+| 変数         | 内容                                        |
+| ------------ | ------------------------------------------- |
+| `user`       | ログイン中のユーザー（未ログインは `null`） |
+| `user.id`    | ユーザーID（DBに保存するときに使う）        |
+| `user.email` | メールアドレス                              |
+| `loading`    | 認証状態を確認中かどうか                    |
+| `signOut`    | ログアウトする関数                          |
 
 ---
 
 ## 現在地を取得したい
 
 ```tsx
-import { useGeolocation } from '@/hooks/useGeolocation'
+import { useGeolocation } from '@/hooks/useGeolocation';
 
 function MapPage() {
-  const { position, error, loading } = useGeolocation()
+  const { position, error, loading } = useGeolocation();
 
-  if (loading) return <div>位置情報を取得中...</div>
-  if (error)   return <div>位置情報の取得に失敗: {error}</div>
+  if (loading) return <div>位置情報を取得中...</div>;
+  if (error) return <div>位置情報の取得に失敗: {error}</div>;
 
   // position.lat, position.lng が使える
-  return <div>緯度: {position.lat}, 経度: {position.lng}</div>
+  return (
+    <div>
+      緯度: {position.lat}, 経度: {position.lng}
+    </div>
+  );
 }
 ```
 
@@ -362,31 +379,31 @@ function MapPage() {
 `useRef` でその要素を渡す。
 
 ```tsx
-import { useRef, useEffect } from 'react'
-import L from 'leaflet'
-import 'leaflet/dist/leaflet.css'
+import { useRef, useEffect } from 'react';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 function MapView() {
-  const mapRef = useRef(null)          // 地図を描く <div> への参照
-  const mapInstanceRef = useRef(null)  // Leaflet インスタンスの保存用
+  const mapRef = useRef(null); // 地図を描く <div> への参照
+  const mapInstanceRef = useRef(null); // Leaflet インスタンスの保存用
 
   useEffect(() => {
-    if (!mapRef.current) return        // div がまだ存在しないなら何もしない
-    if (mapInstanceRef.current) return // 地図が既にあるなら作らない
+    if (!mapRef.current) return; // div がまだ存在しないなら何もしない
+    if (mapInstanceRef.current) return; // 地図が既にあるなら作らない
 
     // Leaflet に <div> を渡して地図を初期化
-    mapInstanceRef.current = L.map(mapRef.current).setView([35.6762, 139.6503], 13)
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapInstanceRef.current)
+    mapInstanceRef.current = L.map(mapRef.current).setView([35.6762, 139.6503], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapInstanceRef.current);
 
     return () => {
       // 画面を離れたら地図を破棄
-      mapInstanceRef.current?.remove()
-      mapInstanceRef.current = null
-    }
-  }, [])
+      mapInstanceRef.current?.remove();
+      mapInstanceRef.current = null;
+    };
+  }, []);
 
   // ref={mapRef} でこの div と mapRef を紐づける
-  return <div ref={mapRef} style={{ height: '100vh', width: '100%' }} />
+  return <div ref={mapRef} style={{ height: '100vh', width: '100%' }} />;
 }
 ```
 
@@ -394,14 +411,14 @@ function MapView() {
 
 ```tsx
 useEffect(() => {
-  if (!mapInstanceRef.current) return
+  if (!mapInstanceRef.current) return;
 
   spots.forEach((spot) => {
     L.marker([spot.lat, spot.lng])
-      .bindPopup(spot.name)  // クリックで名前を表示
-      .addTo(mapInstanceRef.current)
-  })
-}, [spots])  // spots が更新されたら再描画
+      .bindPopup(spot.name) // クリックで名前を表示
+      .addTo(mapInstanceRef.current);
+  });
+}, [spots]); // spots が更新されたら再描画
 ```
 
 ---
@@ -410,19 +427,19 @@ useEffect(() => {
 
 ```tsx
 function SpotRegisterForm() {
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
-  const [submitting, setSubmitting] = useState(false)
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
-  const { user } = useAuth()
-  const { position } = useGeolocation()
+  const { user } = useAuth();
+  const { position } = useGeolocation();
 
   const handleSubmit = async (e) => {
-    e.preventDefault()  // ブラウザのデフォルト動作（ページリロード）をキャンセル
+    e.preventDefault(); // ブラウザのデフォルト動作（ページリロード）をキャンセル
 
-    if (!user || !position) return
+    if (!user || !position) return;
 
-    setSubmitting(true)
+    setSubmitting(true);
     try {
       const { error } = await supabase.from('spots').insert({
         name,
@@ -430,35 +447,26 @@ function SpotRegisterForm() {
         lat: position.lat,
         lng: position.lng,
         user_id: user.id,
-      })
-      if (error) throw error
-      alert('登録しました！')
+      });
+      if (error) throw error;
+      alert('登録しました！');
     } catch {
-      alert('登録に失敗しました')
+      alert('登録に失敗しました');
     } finally {
-      setSubmitting(false)
+      setSubmitting(false);
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit}>
-      <input
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="スポット名"
-        required
-      />
-      <textarea
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        placeholder="どんな発見？"
-      />
+      <input value={name} onChange={(e) => setName(e.target.value)} placeholder="スポット名" required />
+      <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="どんな発見？" />
       {/* disabled で二重送信を防止 */}
       <button type="submit" disabled={submitting}>
         {submitting ? '登録中...' : '登録する'}
       </button>
     </form>
-  )
+  );
 }
 ```
 
@@ -476,12 +484,12 @@ function SpotCard({ spot, onPress }) {
       <h3>{spot.name}</h3>
       <p>{spot.description}</p>
     </div>
-  )
+  );
 }
 
 // 使う側（値を渡す側）
 function SpotList({ spots }) {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
     <div>
@@ -493,7 +501,7 @@ function SpotList({ spots }) {
         />
       ))}
     </div>
-  )
+  );
 }
 ```
 
@@ -503,12 +511,12 @@ TypeScript で型を付ける（推奨）:
 // 型を定義すると「何を渡せばいいか」がエディタで補完される
 type SpotCardProps = {
   spot: {
-    id: string
-    name: string
-    description: string
-  }
-  onPress: (id: string) => void
-}
+    id: string;
+    name: string;
+    description: string;
+  };
+  onPress: (id: string) => void;
+};
 
 function SpotCard({ spot, onPress }: SpotCardProps) {
   // ...
@@ -522,10 +530,10 @@ function SpotCard({ spot, onPress }: SpotCardProps) {
 このプロダクトの仕様：画像はタップするまで非表示。
 
 ```tsx
-import { useState } from 'react'
+import { useState } from 'react';
 
 function SpotCard({ spot }) {
-  const [imageVisible, setImageVisible] = useState(false)
+  const [imageVisible, setImageVisible] = useState(false);
 
   return (
     <div>
@@ -533,18 +541,12 @@ function SpotCard({ spot }) {
       <p>{spot.description}</p>
 
       {/* 画像が非表示のとき → ボタンを表示 */}
-      {!imageVisible && (
-        <button onClick={() => setImageVisible(true)}>
-          画像を見る
-        </button>
-      )}
+      {!imageVisible && <button onClick={() => setImageVisible(true)}>画像を見る</button>}
 
       {/* 画像が表示状態のとき → 画像を表示 */}
-      {imageVisible && (
-        <img src={spot.imageUrl} alt={spot.name} />
-      )}
+      {imageVisible && <img src={spot.imageUrl} alt={spot.name} />}
     </div>
-  )
+  );
 }
 ```
 
@@ -552,9 +554,7 @@ function SpotCard({ spot }) {
 
 ```tsx
 // setImageVisible(true) の代わりに
-<button onClick={() => setImageVisible((prev) => !prev)}>
-  {imageVisible ? '画像を隠す' : '画像を見る'}
-</button>
+<button onClick={() => setImageVisible((prev) => !prev)}>{imageVisible ? '画像を隠す' : '画像を見る'}</button>
 ```
 
 ---
@@ -563,37 +563,31 @@ function SpotCard({ spot }) {
 
 ```tsx
 function LikeButton({ spotId, initialLiked, initialCount }) {
-  const [liked, setLiked] = useState(initialLiked)
-  const [count, setCount] = useState(initialCount)
-  const { user } = useAuth()
+  const [liked, setLiked] = useState(initialLiked);
+  const [count, setCount] = useState(initialCount);
+  const { user } = useAuth();
 
   const handleLike = async () => {
-    if (!user) return  // 未ログインは何もしない
+    if (!user) return; // 未ログインは何もしない
 
     if (liked) {
       // いいね解除
-      await supabase
-        .from('likes')
-        .delete()
-        .eq('spot_id', spotId)
-        .eq('user_id', user.id)
-      setLiked(false)
-      setCount((prev) => prev - 1)
+      await supabase.from('likes').delete().eq('spot_id', spotId).eq('user_id', user.id);
+      setLiked(false);
+      setCount((prev) => prev - 1);
     } else {
       // いいね
-      await supabase
-        .from('likes')
-        .insert({ spot_id: spotId, user_id: user.id })
-      setLiked(true)
-      setCount((prev) => prev + 1)
+      await supabase.from('likes').insert({ spot_id: spotId, user_id: user.id });
+      setLiked(true);
+      setCount((prev) => prev + 1);
     }
-  }
+  };
 
   return (
     <button onClick={handleLike}>
       {liked ? '❤️' : '🤍'} {count}
     </button>
-  )
+  );
 }
 ```
 
@@ -604,11 +598,11 @@ function LikeButton({ spotId, initialLiked, initialCount }) {
 Supabase のリアルタイム機能を使う。誰かがコメントを投稿したとき、ページをリロードしなくても自動で表示される。
 
 ```tsx
-import { useState, useEffect } from 'react'
-import { supabase } from '@/lib/supabase'
+import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
 
 function CommentSection({ spotId }) {
-  const [comments, setComments] = useState([])
+  const [comments, setComments] = useState([]);
 
   useEffect(() => {
     // ① まず既存のコメントを全件取得
@@ -617,31 +611,31 @@ function CommentSection({ spotId }) {
       .select('*')
       .eq('spot_id', spotId)
       .order('created_at', { ascending: false })
-      .then(({ data }) => setComments(data ?? []))
+      .then(({ data }) => setComments(data ?? []));
 
     // ② 新しいコメントが追加されたら自動で反映
     const channel = supabase
-      .channel(`comments-${spotId}`)  // チャンネル名（一意にする）
+      .channel(`comments-${spotId}`) // チャンネル名（一意にする）
       .on(
         'postgres_changes',
         {
-          event: 'INSERT',           // 新規追加のとき
+          event: 'INSERT', // 新規追加のとき
           schema: 'public',
           table: 'comments',
-          filter: `spot_id=eq.${spotId}`,  // このスポットのコメントだけ
+          filter: `spot_id=eq.${spotId}`, // このスポットのコメントだけ
         },
         (payload) => {
           // 新しいコメントをリストの先頭に追加
-          setComments((prev) => [payload.new, ...prev])
-        }
+          setComments((prev) => [payload.new, ...prev]);
+        },
       )
-      .subscribe()
+      .subscribe();
 
     // ③ 画面を離れたら購読を解除する（重要！）
     return () => {
-      supabase.removeChannel(channel)
-    }
-  }, [spotId])
+      supabase.removeChannel(channel);
+    };
+  }, [spotId]);
 
   return (
     <ul>
@@ -649,7 +643,7 @@ function CommentSection({ spotId }) {
         <li key={comment.id}>{comment.text}</li>
       ))}
     </ul>
-  )
+  );
 }
 ```
 
@@ -669,28 +663,28 @@ function CommentSection({ spotId }) {
 
 ```tsx
 function SpotDetailPage() {
-  const { spotId } = Route.useParams()
+  const { spotId } = Route.useParams();
   // ↓ このデータ取得ロジックを切り出したい
-  const [spot, setSpot] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [spot, setSpot] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     async function fetch() {
       try {
-        const { data, error } = await supabase.from('spots').select('*').eq('id', spotId).single()
-        if (error) throw error
-        setSpot(data)
+        const { data, error } = await supabase.from('spots').select('*').eq('id', spotId).single();
+        if (error) throw error;
+        setSpot(data);
       } catch {
-        setError('取得失敗')
+        setError('取得失敗');
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }
-    fetch()
-  }, [spotId])
+    fetch();
+  }, [spotId]);
 
-  return <div>{spot?.name}</div>
+  return <div>{spot?.name}</div>;
 }
 ```
 
@@ -698,48 +692,48 @@ function SpotDetailPage() {
 
 ```tsx
 // src/features/spots/hooks/useSpot.ts
-import { useState, useEffect } from 'react'
-import { supabase } from '@/lib/supabase'
+import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
 
 export function useSpot(spotId: string) {
   // コンポーネントからロジックをそのまま持ってくる
-  const [spot, setSpot] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [spot, setSpot] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     async function fetch() {
       try {
-        const { data, error } = await supabase.from('spots').select('*').eq('id', spotId).single()
-        if (error) throw error
-        setSpot(data)
+        const { data, error } = await supabase.from('spots').select('*').eq('id', spotId).single();
+        if (error) throw error;
+        setSpot(data);
       } catch {
-        setError('取得失敗')
+        setError('取得失敗');
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }
-    fetch()
-  }, [spotId])
+    fetch();
+  }, [spotId]);
 
   // 使う側が必要なものを return で返す
-  return { spot, loading, error }
+  return { spot, loading, error };
 }
 ```
 
 ③ コンポーネントで import して使う
 
 ```tsx
-import { useSpot } from '@/features/spots/hooks/useSpot'
+import { useSpot } from '@/features/spots/hooks/useSpot';
 
 function SpotDetailPage() {
-  const { spotId } = Route.useParams()
-  const { spot, loading, error } = useSpot(spotId)  // 1行になった
+  const { spotId } = Route.useParams();
+  const { spot, loading, error } = useSpot(spotId); // 1行になった
 
-  if (loading) return <div>読み込み中...</div>
-  if (error)   return <div>{error}</div>
+  if (loading) return <div>読み込み中...</div>;
+  if (error) return <div>{error}</div>;
 
-  return <div>{spot?.name}</div>
+  return <div>{spot?.name}</div>;
 }
 ```
 
@@ -754,52 +748,52 @@ function SpotDetailPage() {
 ① ファイルを作る（例: `src/features/auth/AuthContext.tsx`）
 
 ```tsx
-import { createContext, useContext, useState, useEffect } from 'react'
-import { supabase } from '@/lib/supabase'
+import { createContext, useContext, useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
 
 // ① Context が持つデータの型を定義
 type AuthContextType = {
-  user: any | null
-  loading: boolean
-  signOut: () => Promise<void>
-}
+  user: any | null;
+  loading: boolean;
+  signOut: () => Promise<void>;
+};
 
 // ② Context を作る（null! はおまじないとして覚えておく）
-const AuthContext = createContext<AuthContextType>(null!)
+const AuthContext = createContext<AuthContextType>(null!);
 
 // ③ Provider: データを管理して子コンポーネント全体に届ける
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      setUser(data.session?.user ?? null)
-      setLoading(false)
-    })
+      setUser(data.session?.user ?? null);
+      setLoading(false);
+    });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
-    })
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
 
-    return () => subscription.unsubscribe()
-  }, [])
+    return () => subscription.unsubscribe();
+  }, []);
 
   const signOut = async () => {
-    await supabase.auth.signOut()
-  }
+    await supabase.auth.signOut();
+  };
 
   return (
     // value に渡したものが全コンポーネントから参照できる
-    <AuthContext.Provider value={{ user, loading, signOut }}>
-      {children}
-    </AuthContext.Provider>
-  )
+    <AuthContext.Provider value={{ user, loading, signOut }}>{children}</AuthContext.Provider>
+  );
 }
 
 // ④ 使いやすいようにカスタムフックとして公開
 export function useAuth() {
-  return useContext(AuthContext)
+  return useContext(AuthContext);
 }
 ```
 
@@ -807,7 +801,7 @@ export function useAuth() {
 
 ```tsx
 // src/routes/__root.tsx
-import { AuthProvider } from '@/features/auth/AuthContext'
+import { AuthProvider } from '@/features/auth/AuthContext';
 
 export const Route = createRootRoute({
   component: () => (
@@ -815,14 +809,14 @@ export const Route = createRootRoute({
       <Outlet />
     </AuthProvider>
   ),
-})
+});
 ```
 
 ③ どこからでも `useAuth()` で取得できる
 
 ```tsx
 // どのコンポーネントでも
-const { user, signOut } = useAuth()
+const { user, signOut } = useAuth();
 ```
 
 ---
@@ -835,26 +829,26 @@ React を書くうえで最低限知っておくと助かる型の書き方。
 
 ```tsx
 // よく使う型
-const name: string = 'hello'
-const count: number = 0
-const flag: boolean = true
-const items: string[] = ['a', 'b']  // 配列
-const value: string | null = null   // null になりえる
+const name: string = 'hello';
+const count: number = 0;
+const flag: boolean = true;
+const items: string[] = ['a', 'b']; // 配列
+const value: string | null = null; // null になりえる
 ```
 
 **オブジェクトの型（= Spotの型）:**
 
 ```tsx
 type Spot = {
-  id: string
-  name: string
-  description: string
-  lat: number
-  lng: number
-  user_id: string
-  created_at: string
-  image_url: string | null  // null になりえる場合は | null
-}
+  id: string;
+  name: string;
+  description: string;
+  lat: number;
+  lng: number;
+  user_id: string;
+  created_at: string;
+  image_url: string | null; // null になりえる場合は | null
+};
 ```
 
 **関数の型:**
@@ -862,38 +856,38 @@ type Spot = {
 ```tsx
 // 引数と戻り値に型を付ける
 function calcDistance(lat1: number, lng1: number): number {
-  return 0
+  return 0;
 }
 
 // 型だけを定義する（propsの onPress など）
-type OnPressHandler = (id: string) => void
+type OnPressHandler = (id: string) => void;
 ```
 
 **useState に型を付ける:**
 
 ```tsx
 // 型を明示する（初期値から推論できない場合）
-const [spot, setSpot] = useState<Spot | null>(null)
-const [spots, setSpots] = useState<Spot[]>([])
-const [error, setError] = useState<string | null>(null)
+const [spot, setSpot] = useState<Spot | null>(null);
+const [spots, setSpots] = useState<Spot[]>([]);
+const [error, setError] = useState<string | null>(null);
 ```
 
 **型エラーが出たときの対処:**
 
 ```tsx
 // エラー: 'string | null' は 'string' に割り当てられない
-const name: string = spot.name  // spot.name が null の可能性がある
+const name: string = spot.name; // spot.name が null の可能性がある
 
 // 解決①: null チェックをする
 if (spot.name) {
-  const name: string = spot.name  // ここでは string 確定
+  const name: string = spot.name; // ここでは string 確定
 }
 
 // 解決②: デフォルト値を使う
-const name: string = spot.name ?? '名前なし'
+const name: string = spot.name ?? '名前なし';
 
 // 解決③: Optional chaining（null なら undefined を返す）
-const upper = spot.name?.toUpperCase()
+const upper = spot.name?.toUpperCase();
 ```
 
 ---
@@ -904,9 +898,9 @@ const upper = spot.name?.toUpperCase()
 
 ```tsx
 function SpotCard({ spot }) {
-  console.log('SpotCard が描画された', spot)  // ブラウザの開発者ツール > Console で見える
+  console.log('SpotCard が描画された', spot); // ブラウザの開発者ツール > Console で見える
 
-  return <div>{spot.name}</div>
+  return <div>{spot.name}</div>;
 }
 ```
 
@@ -914,32 +908,32 @@ useEffect の中でも使える:
 
 ```tsx
 useEffect(() => {
-  console.log('spotId が変わった:', spotId)
-}, [spotId])
+  console.log('spotId が変わった:', spotId);
+}, [spotId]);
 ```
 
 ### よくある確認ポイント
 
 ```tsx
 // データが取れているか確認
-const { data, error } = await supabase.from('spots').select('*')
-console.log('data:', data)   // データの中身
-console.log('error:', error) // エラーがあれば表示される
+const { data, error } = await supabase.from('spots').select('*');
+console.log('data:', data); // データの中身
+console.log('error:', error); // エラーがあれば表示される
 
 // state が正しく更新されているか確認
-const [spots, setSpots] = useState([])
-console.log('現在の spots:', spots)  // コンポーネントの再レンダリングのたびに出力される
+const [spots, setSpots] = useState([]);
+console.log('現在の spots:', spots); // コンポーネントの再レンダリングのたびに出力される
 ```
 
 ### 開発者ツールの開き方
 
 `F12` または `右クリック → 検証`
 
-| タブ | 用途 |
-|------|------|
-| Console | console.log の出力・エラーメッセージ |
-| Network | APIリクエストの内容・レスポンス |
-| Elements | HTMLの構造確認 |
+| タブ     | 用途                                 |
+| -------- | ------------------------------------ |
+| Console  | console.log の出力・エラーメッセージ |
+| Network  | APIリクエストの内容・レスポンス      |
+| Elements | HTMLの構造確認                       |
 
 ### エラーメッセージの読み方
 
@@ -1007,14 +1001,14 @@ useEffect(() => {
 ```tsx
 // NG: setCount した直後に count を読んでも古い値のまま
 const handleClick = () => {
-  setCount(count + 1)
-  console.log(count)  // まだ古い値が出る
-}
+  setCount(count + 1);
+  console.log(count); // まだ古い値が出る
+};
 
 // OK: 更新後の値が必要なら useEffect で監視する
 useEffect(() => {
-  console.log(count)  // count が変わったときに実行される
-}, [count])
+  console.log(count); // count が変わったときに実行される
+}, [count]);
 ```
 
 ### `map` で key の警告が出る
@@ -1025,10 +1019,14 @@ Warning: Each child in a list should have a unique "key" prop.
 
 ```tsx
 // NG
-{spots.map((spot) => <SpotCard spot={spot} />)}
+{
+  spots.map((spot) => <SpotCard spot={spot} />);
+}
 
 // OK: key に一意の値を渡す
-{spots.map((spot) => <SpotCard key={spot.id} spot={spot} />)}
+{
+  spots.map((spot) => <SpotCard key={spot.id} spot={spot} />);
+}
 ```
 
 ---
@@ -1037,26 +1035,26 @@ Warning: Each child in a list should have a unique "key" prop.
 
 ```tsx
 // 全件取得
-const { data } = await supabase.from('spots').select('*')
+const { data } = await supabase.from('spots').select('*');
 
 // 条件付き取得（id が一致するもの1件）
-const { data } = await supabase.from('spots').select('*').eq('id', spotId).single()
+const { data } = await supabase.from('spots').select('*').eq('id', spotId).single();
 
 // 新規作成
-const { error } = await supabase.from('spots').insert({ name, lat, lng, user_id: user.id })
+const { error } = await supabase.from('spots').insert({ name, lat, lng, user_id: user.id });
 
 // 更新
-const { error } = await supabase.from('spots').update({ name }).eq('id', spotId)
+const { error } = await supabase.from('spots').update({ name }).eq('id', spotId);
 
 // 削除
-const { error } = await supabase.from('spots').delete().eq('id', spotId)
+const { error } = await supabase.from('spots').delete().eq('id', spotId);
 
 // ログイン
-const { error } = await supabase.auth.signInWithPassword({ email, password })
+const { error } = await supabase.auth.signInWithPassword({ email, password });
 
 // 新規登録
-const { error } = await supabase.auth.signUp({ email, password })
+const { error } = await supabase.auth.signUp({ email, password });
 
 // ログアウト
-await supabase.auth.signOut()
+await supabase.auth.signOut();
 ```

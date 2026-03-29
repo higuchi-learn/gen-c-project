@@ -32,17 +32,17 @@ useEffect(() => {
   return () => {
     // クリーンアップ（省略可）
     // コンポーネントが消えるときに実行される
-  }
-}, [依存配列])
+  };
+}, [依存配列]);
 ```
 
 ### 依存配列の意味
 
-| 書き方 | 実行タイミング |
-|--------|---------------|
-| `[]` | マウント時に1回だけ |
-| `[userId]` | `userId` が変わるたびに |
-| なし | 毎レンダリング（ほぼ使わない） |
+| 書き方     | 実行タイミング                 |
+| ---------- | ------------------------------ |
+| `[]`       | マウント時に1回だけ            |
+| `[userId]` | `userId` が変わるたびに        |
+| なし       | 毎レンダリング（ほぼ使わない） |
 
 ### このプロジェクトでの使いどころ
 
@@ -50,22 +50,22 @@ useEffect(() => {
 
 ```tsx
 export function useGeolocation() {
-  const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null)
-  const [error, setError] = useState<string | null>(null)
+  const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     // ブラウザの位置情報APIを呼ぶのは「副作用」なのでuseEffect内に書く
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        setPosition({ lat: pos.coords.latitude, lng: pos.coords.longitude })
+        setPosition({ lat: pos.coords.latitude, lng: pos.coords.longitude });
       },
       (err) => {
-        setError(err.message)
-      }
-    )
-  }, []) // [] = マップ表示時に1回だけ取得
+        setError(err.message);
+      },
+    );
+  }, []); // [] = マップ表示時に1回だけ取得
 
-  return { position, error }
+  return { position, error };
 }
 ```
 
@@ -78,15 +78,15 @@ useEffect(() => {
   const channel = supabase
     .channel('comments')
     .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'comments' }, (payload) => {
-      setComments((prev) => [...prev, payload.new as Comment])
+      setComments((prev) => [...prev, payload.new as Comment]);
     })
-    .subscribe()
+    .subscribe();
 
   // クリーンアップ: コンポーネントが消えたら購読解除
   return () => {
-    supabase.removeChannel(channel)
-  }
-}, [spotId]) // spotIdが変わったら再購読
+    supabase.removeChannel(channel);
+  };
+}, [spotId]); // spotIdが変わったら再購読
 ```
 
 ---
@@ -99,40 +99,36 @@ Reactには「データを取ってきて表示する」という標準機能が
 
 ```tsx
 function SpotDetailPage() {
-  const [spot, setSpot] = useState<Spot | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [spot, setSpot] = useState<Spot | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const { spotId } = Route.useParams()
+  const { spotId } = Route.useParams();
 
   useEffect(() => {
     async function fetchSpot() {
       try {
-        setLoading(true)
-        const { data, error } = await supabase
-          .from('spots')
-          .select('*')
-          .eq('id', spotId)
-          .single()
+        setLoading(true);
+        const { data, error } = await supabase.from('spots').select('*').eq('id', spotId).single();
 
-        if (error) throw error
-        setSpot(data)
+        if (error) throw error;
+        setSpot(data);
       } catch (err) {
-        setError('スポットの取得に失敗しました')
+        setError('スポットの取得に失敗しました');
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }
 
-    fetchSpot()
-  }, [spotId])
+    fetchSpot();
+  }, [spotId]);
 
   // 状態に応じて表示を分岐
-  if (loading) return <div>読み込み中...</div>
-  if (error) return <div>{error}</div>
-  if (!spot) return null
+  if (loading) return <div>読み込み中...</div>;
+  if (error) return <div>{error}</div>;
+  if (!spot) return null;
 
-  return <SpotDetail spot={spot} />
+  return <SpotDetail spot={spot} />;
 }
 ```
 
@@ -141,16 +137,16 @@ function SpotDetailPage() {
 ```tsx
 // NG: useEffectのコールバックにasyncをつけてはいけない
 useEffect(async () => {
-  const data = await fetchSpots() // Promise を返すとReactが混乱する
-}, [])
+  const data = await fetchSpots(); // Promise を返すとReactが混乱する
+}, []);
 
 // OK: 内部で非同期関数を定義して呼ぶ
 useEffect(() => {
   async function fetch() {
-    const data = await fetchSpots()
+    const data = await fetchSpots();
   }
-  fetch()
-}, [])
+  fetch();
+}, []);
 ```
 
 ---
@@ -175,53 +171,51 @@ App
 ### 実装パターン（AuthContext.tsx）
 
 ```tsx
-import { createContext, useContext, useState, useEffect } from 'react'
-import { supabase } from '@/lib/supabase'
-import type { User } from '@supabase/supabase-js'
+import { createContext, useContext, useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
+import type { User } from '@supabase/supabase-js';
 
 // ① Contextの型を定義
 type AuthContextType = {
-  user: User | null
-  loading: boolean
-  signOut: () => Promise<void>
-}
+  user: User | null;
+  loading: boolean;
+  signOut: () => Promise<void>;
+};
 
 // ② Contextを作成（初期値はダミー）
-const AuthContext = createContext<AuthContextType>(null!)
+const AuthContext = createContext<AuthContextType>(null!);
 
 // ③ Provider: アプリ全体を包む
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // 初回: 現在のセッションを確認
     supabase.auth.getSession().then(({ data }) => {
-      setUser(data.session?.user ?? null)
-      setLoading(false)
-    })
+      setUser(data.session?.user ?? null);
+      setLoading(false);
+    });
 
     // ログイン/ログアウト時に自動で更新
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
-    })
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
 
-    return () => subscription.unsubscribe()
-  }, [])
+    return () => subscription.unsubscribe();
+  }, []);
 
   const signOut = async () => {
-    await supabase.auth.signOut()
-  }
+    await supabase.auth.signOut();
+  };
 
-  return (
-    <AuthContext.Provider value={{ user, loading, signOut }}>
-      {children}
-    </AuthContext.Provider>
-  )
+  return <AuthContext.Provider value={{ user, loading, signOut }}>{children}</AuthContext.Provider>;
 }
 
 // ④ カスタムフックとして公開（useContextを直接使わせない）
-export const useAuth = () => useContext(AuthContext)
+export const useAuth = () => useContext(AuthContext);
 ```
 
 ### main.tsx で Provider を設定
@@ -230,11 +224,13 @@ export const useAuth = () => useContext(AuthContext)
 // src/main.tsx
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <AuthProvider>          {/* ← ここで包む */}
+    <AuthProvider>
+      {' '}
+      {/* ← ここで包む */}
       <RouterProvider router={router} />
     </AuthProvider>
-  </StrictMode>
-)
+  </StrictMode>,
+);
 ```
 
 ### 使う側
@@ -242,11 +238,11 @@ createRoot(document.getElementById('root')!).render(
 ```tsx
 // どのコンポーネントからでも
 function CommentSection({ spotId }: { spotId: string }) {
-  const { user } = useAuth()
+  const { user } = useAuth();
 
-  if (!user) return <p>コメントはログインが必要です</p>
+  if (!user) return <p>コメントはログインが必要です</p>;
 
-  return <CommentForm spotId={spotId} userId={user.id} />
+  return <CommentForm spotId={spotId} userId={user.id} />;
 }
 ```
 
@@ -262,30 +258,30 @@ function CommentSection({ spotId }: { spotId: string }) {
 ```tsx
 // src/hooks/useGeolocation.ts
 export function useGeolocation() {
-  const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null)
-  const [error, setError] = useState<string | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!navigator.geolocation) {
-      setError('このブラウザは位置情報に対応していません')
-      setLoading(false)
-      return
+      setError('このブラウザは位置情報に対応していません');
+      setLoading(false);
+      return;
     }
 
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        setPosition({ lat: pos.coords.latitude, lng: pos.coords.longitude })
-        setLoading(false)
+        setPosition({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        setLoading(false);
       },
       (err) => {
-        setError(err.message)
-        setLoading(false)
-      }
-    )
-  }, [])
+        setError(err.message);
+        setLoading(false);
+      },
+    );
+  }, []);
 
-  return { position, error, loading }
+  return { position, error, loading };
 }
 ```
 
@@ -293,25 +289,25 @@ export function useGeolocation() {
 
 ```tsx
 // src/hooks/useNearbyCheck.ts
-const NEARBY_RADIUS_KM = 1.0
+const NEARBY_RADIUS_KM = 1.0;
 
 function calcDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
   // ハーバーサイン公式（緯度経度 → 距離km）
-  const R = 6371
-  const dLat = ((lat2 - lat1) * Math.PI) / 180
-  const dLng = ((lng2 - lng1) * Math.PI) / 180
+  const R = 6371;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLng = ((lng2 - lng1) * Math.PI) / 180;
   const a =
     Math.sin(dLat / 2) ** 2 +
-    Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLng / 2) ** 2
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+    Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
 export function useNearbyCheck(spotLat: number, spotLng: number) {
-  const { position } = useGeolocation()  // カスタムhookの中でカスタムhookを使える
+  const { position } = useGeolocation(); // カスタムhookの中でカスタムhookを使える
 
-  if (!position) return false
+  if (!position) return false;
 
-  return calcDistance(position.lat, position.lng, spotLat, spotLng) <= NEARBY_RADIUS_KM
+  return calcDistance(position.lat, position.lng, spotLat, spotLng) <= NEARBY_RADIUS_KM;
 }
 ```
 
@@ -320,27 +316,27 @@ export function useNearbyCheck(spotLat: number, spotLng: number) {
 ```tsx
 // src/features/spots/hooks/useSpots.ts
 export function useSpots() {
-  const [spots, setSpots] = useState<Spot[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [spots, setSpots] = useState<Spot[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchSpots() {
       try {
-        const { data, error } = await supabase.from('spots').select('*')
-        if (error) throw error
-        setSpots(data)
+        const { data, error } = await supabase.from('spots').select('*');
+        if (error) throw error;
+        setSpots(data);
       } catch {
-        setError('スポットの取得に失敗しました')
+        setError('スポットの取得に失敗しました');
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }
 
-    fetchSpots()
-  }, [])
+    fetchSpots();
+  }, []);
 
-  return { spots, loading, error }
+  return { spots, loading, error };
 }
 ```
 
@@ -353,10 +349,10 @@ export function useSpots() {
 ```tsx
 // 型定義
 type SpotCardProps = {
-  spot: Spot
-  onTap: (spotId: string) => void
-  showImage?: boolean  // ? = 省略可能
-}
+  spot: Spot;
+  onTap: (spotId: string) => void;
+  showImage?: boolean; // ? = 省略可能
+};
 
 // コンポーネント
 function SpotCard({ spot, onTap, showImage = false }: SpotCardProps) {
@@ -366,11 +362,11 @@ function SpotCard({ spot, onTap, showImage = false }: SpotCardProps) {
       <p>{spot.description}</p>
       {showImage && <img src={spot.imageUrl} alt={spot.name} />}
     </div>
-  )
+  );
 }
 
 // 使う側
-<SpotCard spot={spot} onTap={(id) => navigate({ to: '/spots/$spotId', params: { spotId: id } })} />
+<SpotCard spot={spot} onTap={(id) => navigate({ to: '/spots/$spotId', params: { spotId: id } })} />;
 ```
 
 ### children を渡す
@@ -380,23 +376,25 @@ function SpotCard({ spot, onTap, showImage = false }: SpotCardProps) {
 ```tsx
 // src/components/layout/PageLayout.tsx
 type PageLayoutProps = {
-  title: string
-  children: React.ReactNode  // 子要素の型
-}
+  title: string;
+  children: React.ReactNode; // 子要素の型
+};
 
 function PageLayout({ title, children }: PageLayoutProps) {
   return (
     <div>
-      <header><h1>{title}</h1></header>
+      <header>
+        <h1>{title}</h1>
+      </header>
       <main>{children}</main>
     </div>
-  )
+  );
 }
 
 // 使う側
 <PageLayout title="ミニスポット一覧">
   <SpotList spots={spots} />
-</PageLayout>
+</PageLayout>;
 ```
 
 ---
@@ -407,34 +405,36 @@ function PageLayout({ title, children }: PageLayoutProps) {
 
 ```tsx
 // コメントは現地限定
-{isNearby && <CommentSection spotId={spot.id} />}
+{
+  isNearby && <CommentSection spotId={spot.id} />;
+}
 
 // ローディング中だけスピナー表示
-{loading && <Spinner />}
+{
+  loading && <Spinner />;
+}
 ```
 
 ### 三項演算子（どちらかを表示）
 
 ```tsx
-{user ? (
-  <button onClick={signOut}>ログアウト</button>
-) : (
-  <Link to="/login">ログイン</Link>
-)}
+{
+  user ? <button onClick={signOut}>ログアウト</button> : <Link to="/login">ログイン</Link>;
+}
 ```
 
 ### 早期return（複数の状態分岐に読みやすい）
 
 ```tsx
 function SpotDetailPage() {
-  const { spot, loading, error } = useSpot(spotId)
+  const { spot, loading, error } = useSpot(spotId);
 
-  if (loading) return <LoadingScreen />
-  if (error)   return <ErrorScreen message={error} />
-  if (!spot)   return <NotFoundScreen />
+  if (loading) return <LoadingScreen />;
+  if (error) return <ErrorScreen message={error} />;
+  if (!spot) return <NotFoundScreen />;
 
   // ここまで来たら spot は確実に存在する
-  return <SpotDetail spot={spot} />
+  return <SpotDetail spot={spot} />;
 }
 ```
 
@@ -454,7 +454,7 @@ function SpotList({ spots }: { spots: Spot[] }) {
         <SpotCard key={spot.id} spot={spot} />
       ))}
     </div>
-  )
+  );
 }
 ```
 
@@ -463,7 +463,7 @@ function SpotList({ spots }: { spots: Spot[] }) {
 ```tsx
 function SpotList({ spots }: { spots: Spot[] }) {
   if (spots.length === 0) {
-    return <p>このエリアにはまだスポットがありません。最初の発見者になろう！</p>
+    return <p>このエリアにはまだスポットがありません。最初の発見者になろう！</p>;
   }
 
   return (
@@ -472,7 +472,7 @@ function SpotList({ spots }: { spots: Spot[] }) {
         <SpotCard key={spot.id} spot={spot} />
       ))}
     </div>
-  )
+  );
 }
 ```
 
@@ -480,9 +480,8 @@ function SpotList({ spots }: { spots: Spot[] }) {
 
 ```tsx
 // カテゴリでフィルター
-{spots
-  .filter((spot) => spot.category === selectedCategory)
-  .map((spot) => <SpotCard key={spot.id} spot={spot} />)
+{
+  spots.filter((spot) => spot.category === selectedCategory).map((spot) => <SpotCard key={spot.id} spot={spot} />);
 }
 ```
 
@@ -496,29 +495,29 @@ function SpotList({ spots }: { spots: Spot[] }) {
 `useRef` で実際のDOM要素を参照するのが唯一の方法。
 
 ```tsx
-import { useRef, useEffect } from 'react'
-import L from 'leaflet'
+import { useRef, useEffect } from 'react';
+import L from 'leaflet';
 
 function MapView() {
   // mapRef.current に <div> の実体が入る
-  const mapRef = useRef<HTMLDivElement>(null)
-  const leafletRef = useRef<L.Map | null>(null)  // マップインスタンスを保持
+  const mapRef = useRef<HTMLDivElement>(null);
+  const leafletRef = useRef<L.Map | null>(null); // マップインスタンスを保持
 
   useEffect(() => {
-    if (!mapRef.current) return
-    if (leafletRef.current) return  // 二重初期化を防ぐ
+    if (!mapRef.current) return;
+    if (leafletRef.current) return; // 二重初期化を防ぐ
 
     // DOM要素を渡してマップを初期化
-    leafletRef.current = L.map(mapRef.current).setView([35.6762, 139.6503], 13)
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(leafletRef.current)
+    leafletRef.current = L.map(mapRef.current).setView([35.6762, 139.6503], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(leafletRef.current);
 
     return () => {
-      leafletRef.current?.remove()
-      leafletRef.current = null
-    }
-  }, [])
+      leafletRef.current?.remove();
+      leafletRef.current = null;
+    };
+  }, []);
 
-  return <div ref={mapRef} style={{ height: '100vh' }} />
+  return <div ref={mapRef} style={{ height: '100vh' }} />;
 }
 ```
 
@@ -526,11 +525,11 @@ function MapView() {
 
 ```tsx
 // useState → 値が変わるたびに再レンダリング
-const [count, setCount] = useState(0)
+const [count, setCount] = useState(0);
 
 // useRef → 値が変わっても再レンダリングしない
 // マップインスタンスなど「保持したいけど表示に影響しないもの」に使う
-const mapInstance = useRef<L.Map | null>(null)
+const mapInstance = useRef<L.Map | null>(null);
 ```
 
 ---
@@ -541,18 +540,18 @@ const mapInstance = useRef<L.Map | null>(null)
 
 ```tsx
 function SpotRegisterForm() {
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
-  const [submitting, setSubmitting] = useState(false)
-  const { user } = useAuth()
-  const { position } = useGeolocation()
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const { user } = useAuth();
+  const { position } = useGeolocation();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()  // ← ブラウザのデフォルト送信をキャンセル
+    e.preventDefault(); // ← ブラウザのデフォルト送信をキャンセル
 
-    if (!user || !position) return
+    if (!user || !position) return;
 
-    setSubmitting(true)
+    setSubmitting(true);
     try {
       const { error } = await supabase.from('spots').insert({
         name,
@@ -560,35 +559,31 @@ function SpotRegisterForm() {
         lat: position.lat,
         lng: position.lng,
         user_id: user.id,
-      })
-      if (error) throw error
+      });
+      if (error) throw error;
       // 登録成功後の処理（例: マップに戻る）
     } catch {
-      alert('登録に失敗しました')
+      alert('登録に失敗しました');
     } finally {
-      setSubmitting(false)
+      setSubmitting(false);
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit}>
       <input
         type="text"
         value={name}
-        onChange={(e) => setName(e.target.value)}  // e.target.value で入力値を取得
+        onChange={(e) => setName(e.target.value)} // e.target.value で入力値を取得
         placeholder="スポット名"
         required
       />
-      <textarea
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        placeholder="どんな発見？"
-      />
+      <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="どんな発見？" />
       <button type="submit" disabled={submitting}>
         {submitting ? '登録中...' : '登録する'}
       </button>
     </form>
-  )
+  );
 }
 ```
 
@@ -605,16 +600,13 @@ function SpotRegisterForm() {
 ```tsx
 // useEffectの依存配列に関数を入れるとき、毎レンダリングで再作成されてしまう問題を防ぐ
 const fetchComments = useCallback(async () => {
-  const { data } = await supabase
-    .from('comments')
-    .select('*')
-    .eq('spot_id', spotId)
-  setComments(data ?? [])
-}, [spotId])  // spotIdが変わったときだけ再作成
+  const { data } = await supabase.from('comments').select('*').eq('spot_id', spotId);
+  setComments(data ?? []);
+}, [spotId]); // spotIdが変わったときだけ再作成
 
 useEffect(() => {
-  fetchComments()
-}, [fetchComments])
+  fetchComments();
+}, [fetchComments]);
 ```
 
 **useMemo** — 計算結果をキャッシュする
@@ -622,13 +614,13 @@ useEffect(() => {
 ```tsx
 // 現在地からの距離でスポットをソートする処理（毎回計算は重い）
 const sortedSpots = useMemo(() => {
-  if (!position) return spots
+  if (!position) return spots;
   return [...spots].sort((a, b) => {
-    const distA = calcDistance(position.lat, position.lng, a.lat, a.lng)
-    const distB = calcDistance(position.lat, position.lng, b.lat, b.lng)
-    return distA - distB
-  })
-}, [spots, position])  // spots か position が変わったときだけ再計算
+    const distA = calcDistance(position.lat, position.lng, a.lat, a.lng);
+    const distB = calcDistance(position.lat, position.lng, b.lat, b.lng);
+    return distA - distB;
+  });
+}, [spots, position]); // spots か position が変わったときだけ再計算
 ```
 
 ---
@@ -650,21 +642,21 @@ src/routes/
 ### ページ遷移
 
 ```tsx
-import { Link, useNavigate } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router';
 
 // Linkコンポーネント（<a>タグの代わり）
 <Link to="/spots/$spotId" params={{ spotId: spot.id }}>
   詳細を見る
-</Link>
+</Link>;
 
 // コードから遷移（フォーム送信後など）
 function LoginPage() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
-    await supabase.auth.signInWithPassword({ email, password })
-    navigate({ to: '/' })  // ログイン後にマップへ
-  }
+    await supabase.auth.signInWithPassword({ email, password });
+    navigate({ to: '/' }); // ログイン後にマップへ
+  };
 }
 ```
 
@@ -673,35 +665,39 @@ function LoginPage() {
 ```tsx
 // src/routes/spots/$spotId.tsx
 function SpotDetailPage() {
-  const { spotId } = Route.useParams()  // URLの $spotId 部分が取れる
+  const { spotId } = Route.useParams(); // URLの $spotId 部分が取れる
 
-  const [spot, setSpot] = useState<Spot | null>(null)
+  const [spot, setSpot] = useState<Spot | null>(null);
 
   useEffect(() => {
-    supabase.from('spots').select('*').eq('id', spotId).single()
-      .then(({ data }) => setSpot(data))
-  }, [spotId])
+    supabase
+      .from('spots')
+      .select('*')
+      .eq('id', spotId)
+      .single()
+      .then(({ data }) => setSpot(data));
+  }, [spotId]);
 
   // ...
 }
 ```
 
-### __root.tsx でのレイアウト・認証設定
+### \_\_root.tsx でのレイアウト・認証設定
 
 ```tsx
 // src/routes/__root.tsx
-import { createRootRoute, Outlet } from '@tanstack/react-router'
-import { AuthProvider } from '@/features/auth/AuthContext'
-import { Header } from '@/components/layout/Header'
+import { createRootRoute, Outlet } from '@tanstack/react-router';
+import { AuthProvider } from '@/features/auth/AuthContext';
+import { Header } from '@/components/layout/Header';
 
 export const Route = createRootRoute({
   component: () => (
     <AuthProvider>
       <Header />
-      <Outlet />  {/* 各ページがここにレンダリングされる */}
+      <Outlet /> {/* 各ページがここにレンダリングされる */}
     </AuthProvider>
   ),
-})
+});
 ```
 
 ### ルートガード（ログイン必須ページ）
@@ -710,13 +706,13 @@ export const Route = createRootRoute({
 // src/routes/register.tsx
 export const Route = createFileRoute('/register')({
   beforeLoad: async () => {
-    const { data } = await supabase.auth.getSession()
+    const { data } = await supabase.auth.getSession();
     if (!data.session) {
-      throw redirect({ to: '/login' })  // 未ログインならリダイレクト
+      throw redirect({ to: '/login' }); // 未ログインならリダイレクト
     }
   },
   component: RegisterPage,
-})
+});
 ```
 
 ---
@@ -727,21 +723,13 @@ export const Route = createFileRoute('/register')({
 
 ```tsx
 // 全スポット取得
-const { data: spots } = await supabase.from('spots').select('*')
+const { data: spots } = await supabase.from('spots').select('*');
 
 // 特定スポット取得
-const { data: spot } = await supabase
-  .from('spots')
-  .select('*')
-  .eq('id', spotId)
-  .single()
+const { data: spot } = await supabase.from('spots').select('*').eq('id', spotId).single();
 
 // リレーションを含めて取得（スポット + コメント）
-const { data } = await supabase
-  .from('spots')
-  .select('*, comments(*)')
-  .eq('id', spotId)
-  .single()
+const { data } = await supabase.from('spots').select('*, comments(*)').eq('id', spotId).single();
 ```
 
 ### データ登録
@@ -753,40 +741,42 @@ const { error } = await supabase.from('spots').insert({
   lat: 35.6762,
   lng: 139.6503,
   user_id: user.id,
-})
+});
 ```
 
 ### 認証
 
 ```tsx
 // メール/パスワードでログイン
-const { error } = await supabase.auth.signInWithPassword({ email, password })
+const { error } = await supabase.auth.signInWithPassword({ email, password });
 
 // 新規登録
-const { error } = await supabase.auth.signUp({ email, password })
+const { error } = await supabase.auth.signUp({ email, password });
 
 // ログアウト
-await supabase.auth.signOut()
+await supabase.auth.signOut();
 
 // 現在のユーザー取得
-const { data: { user } } = await supabase.auth.getUser()
+const {
+  data: { user },
+} = await supabase.auth.getUser();
 ```
 
 ---
 
 ## まとめ：機能別に使うhook
 
-| 機能 | 使うhook・概念 |
-|------|---------------|
-| マップ表示 | `useRef`（DOM）+ `useEffect`（初期化） |
-| 現在地取得 | `useEffect` → カスタムhook `useGeolocation` |
-| ログイン状態 | `createContext` + `useContext` → `useAuth` |
-| スポット一覧 | `useEffect` + `useState`（loading/error/data） |
-| 現地限定判定 | `useGeolocation` + 距離計算 → `useNearbyCheck` |
-| リアルタイムコメント | `useEffect`（購読）+ クリーンアップ |
+| 機能                 | 使うhook・概念                                    |
+| -------------------- | ------------------------------------------------- |
+| マップ表示           | `useRef`（DOM）+ `useEffect`（初期化）            |
+| 現在地取得           | `useEffect` → カスタムhook `useGeolocation`       |
+| ログイン状態         | `createContext` + `useContext` → `useAuth`        |
+| スポット一覧         | `useEffect` + `useState`（loading/error/data）    |
+| 現地限定判定         | `useGeolocation` + 距離計算 → `useNearbyCheck`    |
+| リアルタイムコメント | `useEffect`（購読）+ クリーンアップ               |
 | スポット登録フォーム | `useState`（フォーム値）+ `useEffect`（位置情報） |
-| ページ遷移 | TanStack Router `useNavigate` / `Link` |
-| ソート・フィルター | `useMemo` |
+| ページ遷移           | TanStack Router `useNavigate` / `Link`            |
+| ソート・フィルター   | `useMemo`                                         |
 
 ## 実装を始める順番
 
