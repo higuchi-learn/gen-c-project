@@ -39,6 +39,14 @@
 
 ---
 
+## Storybook
+
+- Story ファイルは `src/stories/` 以下に隔離する（`src/features/` には置かない）
+- 起動: `pnpm storybook`（ポート 6006）
+- DB アクセスを伴うコンポーネントは `vi.mock` でフックをモックする
+
+---
+
 ## ドキュメント構成
 
 | ファイル                         | 役割                               |
