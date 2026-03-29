@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
