@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
-// 位置情報が取得できない場合のフォールバック（東京）
-const FALLBACK_POSITION: [number, number] = [35.6895, 139.6917];
+// 位置情報が取得できない場合のフォールバック（愛工大）
+const FALLBACK_POSITION: [number, number] = [35.1845, 137.1113];
 
 // 現在地を取得する時に使う型定義
 type GeolocationState = {
@@ -34,7 +34,7 @@ export function useGeolocation(): GeolocationState {
         },
         // エラー
         () => {
-          // 権限拒否・タイムアウト・その他エラー → 東京にフォールバック
+          // 権限拒否・タイムアウト・その他エラー →愛工大にフォールバック
           setLoading(false);
         },
         { timeout: 5000 },
