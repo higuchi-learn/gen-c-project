@@ -1,9 +1,9 @@
+import React, { useState, useEffect } from 'react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useState, useEffect } from 'react';
-import { supabase } from '../../../lib/supabase';
-import { Button } from '../../../components/ui/Button';
-import { Input } from '../../../components/ui/Input';
-import { Card } from '../../../components/ui/Card';
+import { supabase } from '../lib/supabase';
+import { Button } from '../components/ui/Button';
+import { Input } from '../components/ui/Input';
+import { Card } from '../components/ui/Card';
 
 export const Route = createFileRoute('/src/routes/profile-setup')({
   component: ProfileSetupPage,
