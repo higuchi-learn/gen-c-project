@@ -13,8 +13,10 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ProfileSetupRouteImport } from './routes/profile-setup'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SpotsSpotIdRouteImport } from './routes/spots/$spotId'
+import { Route as AccountSpotsRouteImport } from './routes/account.spots'
 
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
@@ -36,6 +38,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AccountRoute = AccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -46,61 +53,79 @@ const SpotsSpotIdRoute = SpotsSpotIdRouteImport.update({
   path: '/spots/$spotId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AccountSpotsRoute = AccountSpotsRouteImport.update({
+  id: '/spots',
+  path: '/spots',
+  getParentRoute: () => AccountRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/account': typeof AccountRouteWithChildren
   '/login': typeof LoginRoute
   '/profile-setup': typeof ProfileSetupRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/account/spots': typeof AccountSpotsRoute
   '/spots/$spotId': typeof SpotsSpotIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/account': typeof AccountRouteWithChildren
   '/login': typeof LoginRoute
   '/profile-setup': typeof ProfileSetupRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/account/spots': typeof AccountSpotsRoute
   '/spots/$spotId': typeof SpotsSpotIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/account': typeof AccountRouteWithChildren
   '/login': typeof LoginRoute
   '/profile-setup': typeof ProfileSetupRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/account/spots': typeof AccountSpotsRoute
   '/spots/$spotId': typeof SpotsSpotIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/account'
     | '/login'
     | '/profile-setup'
     | '/register'
     | '/reset-password'
+    | '/account/spots'
     | '/spots/$spotId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/account'
     | '/login'
     | '/profile-setup'
     | '/register'
     | '/reset-password'
+    | '/account/spots'
     | '/spots/$spotId'
   id:
     | '__root__'
     | '/'
+    | '/account'
     | '/login'
     | '/profile-setup'
     | '/register'
     | '/reset-password'
+    | '/account/spots'
     | '/spots/$spotId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AccountRoute: typeof AccountRouteWithChildren
   LoginRoute: typeof LoginRoute
   ProfileSetupRoute: typeof ProfileSetupRoute
   RegisterRoute: typeof RegisterRoute
@@ -138,6 +163,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/account': {
+      id: '/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -152,11 +184,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SpotsSpotIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/account/spots': {
+      id: '/account/spots'
+      path: '/spots'
+      fullPath: '/account/spots'
+      preLoaderRoute: typeof AccountSpotsRouteImport
+      parentRoute: typeof AccountRoute
+    }
   }
 }
 
+interface AccountRouteChildren {
+  AccountSpotsRoute: typeof AccountSpotsRoute
+}
+
+const AccountRouteChildren: AccountRouteChildren = {
+  AccountSpotsRoute: AccountSpotsRoute,
+}
+
+const AccountRouteWithChildren =
+  AccountRoute._addFileChildren(AccountRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AccountRoute: AccountRouteWithChildren,
   LoginRoute: LoginRoute,
   ProfileSetupRoute: ProfileSetupRoute,
   RegisterRoute: RegisterRoute,
