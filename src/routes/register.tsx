@@ -34,7 +34,7 @@ function RegisterPage() {
       } else {
         alert('登録が完了しました！');
       }
-      void navigate({ to: '/login' });
+      void navigate({ to: '/login', search: { redirect: undefined } });
     }
     setLoading(false);
   };
@@ -65,7 +65,11 @@ function RegisterPage() {
             {loading ? '登録中...' : 'アカウントを作成する'}
           </Button>
 
-          <Button type="button" variant="primary" onClick={() => void navigate({ to: '/login' })}>
+          <Button
+            type="button"
+            variant="primary"
+            onClick={() => void navigate({ to: '/login', search: { redirect: undefined } })}
+          >
             ログイン画面に戻る
           </Button>
         </div>

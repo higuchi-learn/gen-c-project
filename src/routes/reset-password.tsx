@@ -56,7 +56,11 @@ function ResetPasswordPage() {
               {loading ? '送信中...' : '再設定メールを送る'}
             </Button>
 
-            <Button type="button" variant="secondary" onClick={() => void navigate({ to: '/login' })}>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => void navigate({ to: '/login', search: { redirect: undefined } })}
+            >
               キャンセル
             </Button>
           </div>
@@ -69,7 +73,7 @@ function ResetPasswordPage() {
             <br />
             届いたメール内のリンクをクリックしてパスワードを変更してください。
           </p>
-          <Button type="button" onClick={() => void navigate({ to: '/login' })}>
+          <Button type="button" onClick={() => void navigate({ to: '/login', search: { redirect: undefined } })}>
             ログイン画面に戻る
           </Button>
         </div>

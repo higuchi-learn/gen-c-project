@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { useNavigate } from '@tanstack/react-router';
+import { useNavigate, useRouter } from '@tanstack/react-router';
 import { supabase } from '../../lib/supabase';
 import { Card } from '../../components/ui/Card';
 import type { User } from '@supabase/supabase-js';
@@ -23,6 +23,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  // ログイン時に現在のURLのsearchパラメータからredirect先を読み取るために使用
+  const router = useRouter();
 
   useEffect(() => {
     // ログイン状態の維持のため、初回レンダリング時に現在のセッションからユーザー情報を取得
@@ -48,14 +50,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           .eq('id', currentUser.id)
           .single();
 
-        // 未登録ならプロフィール設定へ遷移、登録済みならメイン画面へ遷移
+        // 未登録ならプロフィール設定へ遷移、登録済みならredirect先（なければ/）へ遷移
         if (!data?.username) {
           void navigate({ to: '/profile-setup' });
         } else {
-          void navigate({ to: '/' });
+          const search = router.state.location.search as Record<string, string>;
+          void navigate({ to: search.redirect ?? '/' });
         }
       }
-
     });
     // useEffect再実行時にクリーンアップ関数でサブスクリプションを解除
     // subscriptionは「この監視を止めてください」という Supabase の API から返されるオブジェクト

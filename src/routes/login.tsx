@@ -7,6 +7,10 @@ import { GoogleButton } from '../components/ui/GoogleButton';
 import { AuthLayout } from '../features/auth/AuthContext'; // ※あなたの環境のパスに合わせてください
 
 export const Route = createFileRoute('/login')({
+  // ログイン後の遷移先パスを受け取るための search パラメータを定義
+  validateSearch: (search: Record<string, unknown>) => ({
+    redirect: typeof search.redirect === 'string' ? search.redirect : undefined,
+  }),
   component: LoginPage,
 });
 
