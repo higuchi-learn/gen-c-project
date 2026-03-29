@@ -8,97 +8,131 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as RegisterRouteImport } from './routes/register'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as SpotsSpotIdRouteImport } from './routes/spots/$spotId'
+import { Route as rootRouteImport } from './routes/__root';
+import { Route as ResetPasswordRouteImport } from './routes/reset-password';
+import { Route as RegisterRouteImport } from './routes/register';
+import { Route as LoginRouteImport } from './routes/login';
+import { Route as IndexRouteImport } from './routes/index';
+import { Route as SpotsSpotIdRouteImport } from './routes/spots/$spotId';
+import { Route as SrcRoutesProfileSetupRouteImport } from './routes/src/routes/profile-setup';
 
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any);
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const SpotsSpotIdRoute = SpotsSpotIdRouteImport.update({
   id: '/spots/$spotId',
   path: '/spots/$spotId',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
+const SrcRoutesProfileSetupRoute = SrcRoutesProfileSetupRouteImport.update({
+  id: '/src/routes/profile-setup',
+  path: '/src/routes/profile-setup',
+  getParentRoute: () => rootRouteImport,
+} as any);
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/login': typeof LoginRoute
-  '/register': typeof RegisterRoute
-  '/spots/$spotId': typeof SpotsSpotIdRoute
+  '/': typeof IndexRoute;
+  '/login': typeof LoginRoute;
+  '/register': typeof RegisterRoute;
+  '/reset-password': typeof ResetPasswordRoute;
+  '/spots/$spotId': typeof SpotsSpotIdRoute;
+  '/src/routes/profile-setup': typeof SrcRoutesProfileSetupRoute;
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/login': typeof LoginRoute
-  '/register': typeof RegisterRoute
-  '/spots/$spotId': typeof SpotsSpotIdRoute
+  '/': typeof IndexRoute;
+  '/login': typeof LoginRoute;
+  '/register': typeof RegisterRoute;
+  '/reset-password': typeof ResetPasswordRoute;
+  '/spots/$spotId': typeof SpotsSpotIdRoute;
+  '/src/routes/profile-setup': typeof SrcRoutesProfileSetupRoute;
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/login': typeof LoginRoute
-  '/register': typeof RegisterRoute
-  '/spots/$spotId': typeof SpotsSpotIdRoute
+  __root__: typeof rootRouteImport;
+  '/': typeof IndexRoute;
+  '/login': typeof LoginRoute;
+  '/register': typeof RegisterRoute;
+  '/reset-password': typeof ResetPasswordRoute;
+  '/spots/$spotId': typeof SpotsSpotIdRoute;
+  '/src/routes/profile-setup': typeof SrcRoutesProfileSetupRoute;
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/register' | '/spots/$spotId'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/register' | '/spots/$spotId'
-  id: '__root__' | '/' | '/login' | '/register' | '/spots/$spotId'
-  fileRoutesById: FileRoutesById
+  fileRoutesByFullPath: FileRoutesByFullPath;
+  fullPaths: '/' | '/login' | '/register' | '/reset-password' | '/spots/$spotId' | '/src/routes/profile-setup';
+  fileRoutesByTo: FileRoutesByTo;
+  to: '/' | '/login' | '/register' | '/reset-password' | '/spots/$spotId' | '/src/routes/profile-setup';
+  id: '__root__' | '/' | '/login' | '/register' | '/reset-password' | '/spots/$spotId' | '/src/routes/profile-setup';
+  fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  LoginRoute: typeof LoginRoute
-  RegisterRoute: typeof RegisterRoute
-  SpotsSpotIdRoute: typeof SpotsSpotIdRoute
+  IndexRoute: typeof IndexRoute;
+  LoginRoute: typeof LoginRoute;
+  RegisterRoute: typeof RegisterRoute;
+  ResetPasswordRoute: typeof ResetPasswordRoute;
+  SpotsSpotIdRoute: typeof SpotsSpotIdRoute;
+  SrcRoutesProfileSetupRoute: typeof SrcRoutesProfileSetupRoute;
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/reset-password': {
+      id: '/reset-password';
+      path: '/reset-password';
+      fullPath: '/reset-password';
+      preLoaderRoute: typeof ResetPasswordRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/register': {
-      id: '/register'
-      path: '/register'
-      fullPath: '/register'
-      preLoaderRoute: typeof RegisterRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+      id: '/register';
+      path: '/register';
+      fullPath: '/register';
+      preLoaderRoute: typeof RegisterRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+      id: '/login';
+      path: '/login';
+      fullPath: '/login';
+      preLoaderRoute: typeof LoginRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+      id: '/';
+      path: '/';
+      fullPath: '/';
+      preLoaderRoute: typeof IndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/spots/$spotId': {
-      id: '/spots/$spotId'
-      path: '/spots/$spotId'
-      fullPath: '/spots/$spotId'
-      preLoaderRoute: typeof SpotsSpotIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+      id: '/spots/$spotId';
+      path: '/spots/$spotId';
+      fullPath: '/spots/$spotId';
+      preLoaderRoute: typeof SpotsSpotIdRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    '/src/routes/profile-setup': {
+      id: '/src/routes/profile-setup';
+      path: '/src/routes/profile-setup';
+      fullPath: '/src/routes/profile-setup';
+      preLoaderRoute: typeof SrcRoutesProfileSetupRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
   }
 }
 
@@ -106,8 +140,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SpotsSpotIdRoute: SpotsSpotIdRoute,
-}
-export const routeTree = rootRouteImport
-  ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+  SrcRoutesProfileSetupRoute: SrcRoutesProfileSetupRoute,
+};
+export const routeTree = rootRouteImport._addFileChildren(rootRouteChildren)._addFileTypes<FileRouteTypes>();
