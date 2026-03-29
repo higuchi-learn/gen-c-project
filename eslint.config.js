@@ -16,6 +16,7 @@ export default defineConfig(
       'src/api.types.gen.ts',
       'src/routeTree.gen.ts',
       'src/types/database.types.ts',
+      'src/stories/**',
       'supabase/**',
       'dist/**',
     ],

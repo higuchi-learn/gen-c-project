@@ -44,7 +44,7 @@ export const AvatarUpload = ({ userId, onUploadComplete }: AvatarUploadProps) =>
       // 3. プレビューを表示し、親コンポーネントにURLを渡す
       setPreviewUrl(publicUrl);
       onUploadComplete(publicUrl);
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       alert('画像のアップロードに失敗しました: ' + errorMessage);
     } finally {

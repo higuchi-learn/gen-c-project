@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (!data?.username) {
           void navigate({ to: '/profile-setup' });
         } else {
-          const search = router.state.location.search as Record<string, string>;
+          const search = router.state.location.search as { redirect?: string };
           void navigate({ to: search.redirect ?? '/' });
         }
       }

@@ -63,7 +63,7 @@ export const SpotDetail: React.FC<Props> = ({ spotId, onClose }) => {
               <div className={styles.info}>
                 <div className={styles.row}>
                   <LocationOnIcon className={styles.iconInfo} />
-                  <div className={styles.text}>〒012-3456 ◯◯県◯◯市◯◯町◯◯123</div>
+                  <div className={styles.text}>{spot.address ?? '住所情報なし'}</div>
                 </div>
                 <div className={styles.row}>
                   <AccountCircleIcon className={styles.iconInfo} />

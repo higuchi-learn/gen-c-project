@@ -3,14 +3,19 @@ import { createFileRoute, Link, Outlet, useChildMatches } from '@tanstack/react-
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../features/auth/AuthContext';
 import { LogoutButton } from '../components/ui/LogoutButton';
+import type { UserProfile } from '../types';
 
-export const Route = createFileRoute('/account' as any)({
+// DB ビューの型定義（database.types.ts に未含有のため手動定義）
+type UserRankingRow = { discovery_count: number };
+type UserSpotRankingRow = { spot_count: number };
+
+export const Route = createFileRoute('/account')({
   component: AccountPage,
 });
 
 function AccountPage() {
   const { user } = useAuth();
-  const [profile, setProfile] = useState<any>(null);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
   const [stats, setStats] = useState({ discovery_count: 0, spot_count: 0 });
 
   const childMatches = useChildMatches();
@@ -20,8 +25,8 @@ function AccountPage() {
     if (!user || isSubRoute) return;
 
     const fetchProfile = async () => {
-      const { data } = await supabase.from('users').select('*').eq('id', user.id).single();
-      if (data) setProfile(data);
+      const result = await supabase.from('users').select('*').eq('id', user.id).single<UserProfile>();
+      if (result.data) setProfile(result.data);
     };
 
     const fetchStats = async () => {
@@ -29,20 +34,20 @@ function AccountPage() {
         .from('user_ranking')
         .select('discovery_count')
         .eq('user_id', user.id)
-        .single();
+        .single<UserRankingRow>();
       const { data: sData } = await supabase
         .from('user_spot_ranking')
         .select('spot_count')
         .eq('user_id', user.id)
-        .single();
+        .single<UserSpotRankingRow>();
       setStats({
-        discovery_count: dData?.discovery_count || 0,
-        spot_count: sData?.spot_count || 0,
+        discovery_count: dData?.discovery_count ?? 0,
+        spot_count: sData?.spot_count ?? 0,
       });
     };
 
-    fetchProfile();
-    fetchStats();
+    void fetchProfile();
+    void fetchStats();
   }, [user, isSubRoute]);
 
   if (!user) return <div style={{ padding: '20px', textAlign: 'center' }}>読み込み中...</div>;

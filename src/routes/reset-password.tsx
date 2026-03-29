@@ -5,7 +5,7 @@ import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { AuthLayout } from '../features/auth/AuthContext';
 
-export const Route = createFileRoute('/reset-password' as any)({
+export const Route = createFileRoute('/reset-password')({
   component: ResetPasswordPage,
 });
 
@@ -15,7 +15,7 @@ function ResetPasswordPage() {
   const [isSent, setIsSent] = useState(false); // メール送信済みかどうかのフラグ
   const navigate = useNavigate();
 
-  const handleResetPassword = async (e: React.FormEvent) => {
+  const handleResetPassword = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     setLoading(true);
 

@@ -3,7 +3,7 @@ import { supabase } from '../../../lib/supabase';
 import type { Spot } from '../../../types';
 
 // 詳細表示に必要なフィールドのみ取得
-type SpotDetail = Pick<Spot, 'id' | 'name' | 'description' | 'image_url' | 'user_id'>;
+type SpotDetail = Pick<Spot, 'id' | 'name' | 'description' | 'image_url' | 'user_id' | 'address'>;
 
 type UseSpotState = {
   spot: SpotDetail | null;
@@ -21,7 +21,7 @@ export function useSpot(spotId: string): UseSpotState {
       setLoading(true);
       const { data, error } = await supabase
         .from('spots')
-        .select('id, name, description, image_url, user_id')
+        .select('id, name, description, image_url, user_id, address')
         .eq('id', spotId)
         .single();
 

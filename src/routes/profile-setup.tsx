@@ -26,8 +26,10 @@ function ProfileSetupPage() {
       if (user) {
         setUserId(user.id);
         // Googleログインの場合、Googleの名前を初期値としてセットしてあげる
-        if (user.user_metadata?.full_name) {
-          setDisplayName(user.user_metadata.full_name as string);
+        const metadata = user.user_metadata as Record<string, unknown> | undefined;
+        const fullName = metadata?.full_name;
+        if (typeof fullName === 'string') {
+          setDisplayName(fullName);
         }
       }
     });

@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
+import type { PostgrestError } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
 import type { Spot } from '../types';
 
 // Spotテーブルから必要なフィールドだけを抜き取った型
-type SpotMarker = Pick<Spot, 'id' | 'name' | 'description' | 'lat' | 'lng'>;
+type SpotMarker = Pick<Spot, 'id' | 'name' | 'description' | 'lat' | 'lng' | 'address'>;
 
 export function useSpots() {
   // スポット一覧を格納する状態
@@ -17,9 +18,9 @@ export function useSpots() {
   useEffect(() => {
     // Supabaseからスポットデータを取得する非同期関数
     const fetchSpots = async () => {
-      const { data, error }: { data: SpotMarker[] | null; error: { message: string } | null } = await supabase
+      const { data, error }: { data: SpotMarker[] | null; error: PostgrestError | null } = await supabase
         .from('spots')
-        .select('id, name, description, lat, lng');
+        .select('id, name, description, lat, lng, address');
       // エラーがあればエラーメッセージをセットし、そうでなければスポットデータをセットする
       if (error) {
         setError(error.message);

@@ -15,16 +15,12 @@ export const LogoutButton = () => {
       alert('エラーが発生しました: ' + error.message);
     } else {
       // ログアウト成功後、まっぷ移動
-      navigate({ to: '/' });
+      void navigate({ to: '/' });
     }
   };
 
   return (
-    <Button
-      onClick={onLogout}
-      variant="secondary"
-      style={{ color: '#ef4444', borderColor: '#ef4444' }}
-    >
+    <Button onClick={() => void onLogout()} variant="secondary" style={{ color: '#ef4444', borderColor: '#ef4444' }}>
       ログアウト
     </Button>
   );

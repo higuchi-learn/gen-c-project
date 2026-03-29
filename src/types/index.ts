@@ -13,3 +13,7 @@ export type DiscoveryInsert = Database['public']['Tables']['discoveries']['Inser
 
 export type Achievement = Database['public']['Tables']['achievements']['Row'];
 export type AchievementInsert = Database['public']['Tables']['achievements']['Insert'];
+
+export type UserProfile = Database['public']['Tables']['users']['Row'];
+export type UserProfileInsert = Database['public']['Tables']['users']['Insert'];
+export type UserProfileUpdate = Database['public']['Tables']['users']['Update'];

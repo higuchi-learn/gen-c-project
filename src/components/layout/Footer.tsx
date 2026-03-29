@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState } from 'react';
+import { useNavigate, useLocation } from '@tanstack/react-router';
 import { FooterButton } from '../ui/FooterButton';
 import AddLocationIcon from '@mui/icons-material/AddLocation';
 import MapIcon from '@mui/icons-material/Map';
@@ -21,23 +20,29 @@ const styles: { [key: string]: React.CSSProperties } = {
 };
 
 export function Footer() {
-  const [activeButton, setActiveButton] = useState<number>(0);
+  const navigate = useNavigate();
+  // 現在のパスに基づいてアクティブなボタンを決定する
+  const { pathname } = useLocation();
 
-  const handleClick = (index: number) => {
-    setActiveButton(index); // クリックされたボタンを`primary`に設定
-  };
+  const activeButton = pathname === '/new-spot' ? 0 : pathname === '/' ? 1 : 2;
 
   return (
     <footer style={styles.footer}>
-      <FooterButton variant={activeButton === 0 ? 'active' : 'default'} onClick={() => handleClick(0)}>
+      <FooterButton
+        variant={activeButton === 0 ? 'active' : 'default'}
+        onClick={() => void navigate({ to: '/new-spot' })}
+      >
         <AddLocationIcon />
         <span style={styles.label}>追加</span>
       </FooterButton>
-      <FooterButton variant={activeButton === 1 ? 'active' : 'default'} onClick={() => handleClick(1)}>
+      <FooterButton variant={activeButton === 1 ? 'active' : 'default'} onClick={() => void navigate({ to: '/' })}>
         <MapIcon />
         <span style={styles.label}>マップ</span>
       </FooterButton>
-      <FooterButton variant={activeButton === 2 ? 'active' : 'default'} onClick={() => handleClick(2)}>
+      <FooterButton
+        variant={activeButton === 2 ? 'active' : 'default'}
+        onClick={() => void navigate({ to: '/account' })}
+      >
         <AccountCircleIcon />
         <span style={styles.label}>アカウント</span>
       </FooterButton>
