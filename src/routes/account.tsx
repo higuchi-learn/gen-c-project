@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { createFileRoute, Link, Outlet, useChildMatches } from '@tanstack/react-router';
+import { createFileRoute, Link, Outlet, useChildMatches, useNavigate } from '@tanstack/react-router';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../features/auth/AuthContext';
 import { LogoutButton } from '../components/ui/LogoutButton';
+import { LoginRequiredPopup } from '../components/ui/LoginRequiredPopup';
 import type { UserProfile } from '../types';
 
 // DB ビューの型定義（database.types.ts に未含有のため手動定義）
@@ -15,6 +16,7 @@ export const Route = createFileRoute('/account')({
 
 function AccountPage() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [stats, setStats] = useState({ discovery_count: 0, spot_count: 0 });
 
@@ -50,7 +52,7 @@ function AccountPage() {
     void fetchStats();
   }, [user, isSubRoute]);
 
-  if (!user) return <div style={{ padding: '20px', textAlign: 'center' }}>読み込み中...</div>;
+  if (!user) return <LoginRequiredPopup featureName="アカウント" onBack={() => void navigate({ to: '/' })} />;
 
   if (isSubRoute) {
     return <Outlet />;

@@ -5,7 +5,7 @@ import { useGeolocation } from '../../../hooks/useGeolocation';
 import { LocationPickerPopup } from './LocationPickerPopup';
 
 // 初期の地図の拡大度
-const DEFAULT_ZOOM = 13;
+const DEFAULT_ZOOM = 18;
 
 // マップクリックで座標を取得するコンポーネント
 function MapClickHandler({ onMapClick }: { onMapClick: (lat: number, lng: number) => void }) {
@@ -24,12 +24,19 @@ interface SpotLocationPickerProps {
 
 export function SpotLocationPicker({ onConfirm }: SpotLocationPickerProps) {
   const { spots } = useSpots();
-  const { position, loading } = useGeolocation();
+  const { position, loading, isCurrentLocation } = useGeolocation();
 
   // タップした座標を管理する状態（nullのときはポップアップ非表示）
   const [pickedLocation, setPickedLocation] = useState<{ lat: number; lng: number } | null>(null);
 
-  if (loading) return null;
+  // 位置情報取得中はローディング表示
+  if (loading) {
+    return (
+      <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <span>現在地を取得中...</span>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -42,12 +49,14 @@ export function SpotLocationPicker({ onConfirm }: SpotLocationPickerProps) {
         {/* マップクリックで仮マーカーを設置 */}
         <MapClickHandler onMapClick={(lat, lng) => setPickedLocation({ lat, lng })} />
 
-        {/* 現在地マーカー */}
-        <CircleMarker
-          center={position}
-          radius={8}
-          pathOptions={{ color: '#2563eb', fillColor: '#3b82f6', fillOpacity: 1 }}
-        />
+        {/* 現在地マーカー（実際の現在地が取得できた場合のみ表示） */}
+        {isCurrentLocation && (
+          <CircleMarker
+            center={position}
+            radius={8}
+            pathOptions={{ color: '#2563eb', fillColor: '#3b82f6', fillOpacity: 1 }}
+          />
+        )}
 
         {/* 既存スポットのマーカー（参考表示） */}
         {spots.map((spot) => (

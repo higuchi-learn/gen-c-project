@@ -5,28 +5,37 @@ import { useGeolocation } from '../../../hooks/useGeolocation';
 import { SpotDetail } from '../../spots/components/SpotDetail';
 
 // 初期の地図の拡大度
-const DEFAULT_ZOOM = 13;
+const DEFAULT_ZOOM = 18;
 
 export function MapView() {
   const { spots } = useSpots();
-  const { position, loading } = useGeolocation();
+  const { position, loading, isCurrentLocation } = useGeolocation();
   const [selectedSpotId, setSelectedSpotId] = useState<string | null>(null);
 
-  if (loading) return null;
+  // 位置情報取得中はローディング表示
+  if (loading) {
+    return (
+      <div style={{ height: 'calc(100svh - 80px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <span>現在地を取得中...</span>
+      </div>
+    );
+  }
 
   return (
     <>
-      <MapContainer center={position} zoom={DEFAULT_ZOOM} style={{ height: '100svh', width: '100%' }}>
+      <MapContainer center={position} zoom={DEFAULT_ZOOM} style={{ height: 'calc(100svh - 80px)', width: '100%' }}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {/* 現在地マーカー */}
-        <CircleMarker
-          center={position}
-          radius={8}
-          pathOptions={{ color: '#2563eb', fillColor: '#3b82f6', fillOpacity: 1 }}
-        />
+        {/* 現在地マーカー（実際の現在地が取得できた場合のみ表示） */}
+        {isCurrentLocation && (
+          <CircleMarker
+            center={position}
+            radius={8}
+            pathOptions={{ color: '#2563eb', fillColor: '#3b82f6', fillOpacity: 1 }}
+          />
+        )}
         {/* スポットマーカー */}
         {spots.map((spot) => (
           <Marker

@@ -7,6 +7,8 @@ const FALLBACK_POSITION: [number, number] = [35.1845, 137.1113];
 type GeolocationState = {
   position: [number, number];
   loading: boolean;
+  // true = 実際の現在地, false = 取得失敗でフォールバック中
+  isCurrentLocation: boolean;
 };
 
 // 現在地を取得するカスタムフック
@@ -15,10 +17,12 @@ export function useGeolocation(): GeolocationState {
   const [position, setPosition] = useState<[number, number]>(FALLBACK_POSITION);
   // ローディング状態の管理
   const [loading, setLoading] = useState(true);
+  // 実際の現在地が取得できたかどうか
+  const [isCurrentLocation, setIsCurrentLocation] = useState(false);
 
   // コンポーネント初回レンダリング時に現在地を取得
   useEffect(() => {
-    // Geolocation APIが利用できない場合はローディングを終了
+    // Geolocation APIが利用できない場合はローディングを終了（フォールバック）
     if (!navigator.geolocation) {
       setLoading(false);
       return;
@@ -30,11 +34,13 @@ export function useGeolocation(): GeolocationState {
         // posにはブラウザが返す位置情報が入る
         (pos) => {
           setPosition([pos.coords.latitude, pos.coords.longitude]);
+          setIsCurrentLocation(true);
           setLoading(false);
         },
         // エラー
         () => {
-          // 権限拒否・タイムアウト・その他エラー →愛工大にフォールバック
+          // 権限拒否・タイムアウト・その他エラー → 愛工大にフォールバック
+          // isCurrentLocation は false のまま
           setLoading(false);
         },
         { timeout: 5000 },
@@ -53,5 +59,5 @@ export function useGeolocation(): GeolocationState {
     };
   }, []);
 
-  return { position, loading };
+  return { position, loading, isCurrentLocation };
 }
