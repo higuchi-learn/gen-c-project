@@ -9,9 +9,11 @@ import CloseIcon from '@mui/icons-material/Close';
 export const SpotDetail: React.FC = () => {
   return(
     <div className={styles.bottomSheet}>
+      /* ドラッグハンドル */
       <button className={styles.buttonArea}>
         <div className={styles.handle} />
       </button>
+      /* ヘッダー部分 */
       <div className={styles.header}>
         <h1 className={styles.title}>
           スポットスポットスポットスポットスポット
@@ -20,6 +22,7 @@ export const SpotDetail: React.FC = () => {
           <CloseIcon className={styles.iconInfo} />
         </button>
       </div>
+      /* スポットの状態 */
       <div className={styles.iconsRow}>
         <div className={styles.iconItem}>
           <DirectionsWalkIcon className={styles.icon}/>
@@ -30,6 +33,7 @@ export const SpotDetail: React.FC = () => {
           <div>未訪問</div>
         </div>
       </div>
+      /* 詳細情報 */
       <div className={styles.info}>
         <div className={styles.row}>
           <LocationOnIcon className={styles.iconInfo} />
@@ -43,12 +47,13 @@ export const SpotDetail: React.FC = () => {
             hogehoge
           </div>
         </div>
-          <div className={styles.row}>
-            <AssignmentIcon className={styles.iconInfo} />
-            <div className={styles.text}>
-              hogehogehogehogehogehogehogehogehogehogehogehoge
-            </div>
+        <div className={styles.row}>
+          <AssignmentIcon className={styles.iconInfo} />
+          <div className={styles.text}>
+            hogehogehogehogehogehogehogehogehogehogehogehoge
           </div>
+        </div>
+        /* 写真関連 */
         <button className={styles.photoButton}>写真を見る</button>
         <div className={styles.img} />
       </div>

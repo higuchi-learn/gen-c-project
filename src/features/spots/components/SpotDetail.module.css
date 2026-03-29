@@ -17,8 +17,6 @@
   width: 100%;
   border: none;
   padding: 10px;
-  /* font: inherit;
-  color: inherit; */
   display: flex;
   justify-content: center;
   cursor: pointer;
@@ -60,14 +58,6 @@
   cursor: pointer;
   padding: 0;
   flex-shrink: 0;
-  /* background: #d5d5d5;
-  border: none;
-  font: inherit;
-  color: inherit;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  padding: 0; */
 }
 
 .iconsRow {
