@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, CircleMarker } from 'react-leaflet';
 import { useSpots } from '../../../hooks/useSpots';
 import { useGeolocation } from '../../../hooks/useGeolocation';
 
@@ -16,6 +16,12 @@ export function MapView() {
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      {/* 現在地マーカー */}
+      <CircleMarker
+        center={position}
+        radius={8}
+        pathOptions={{ color: '#2563eb', fillColor: '#3b82f6', fillOpacity: 1 }}
       />
       // 存在するスポットの数だけMarkerコンポーネントを表示する
       {spots.map((spot) => (

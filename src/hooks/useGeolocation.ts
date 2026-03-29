@@ -24,22 +24,33 @@ export function useGeolocation(): GeolocationState {
       return;
     }
 
-    // 現在地を取得. 成功, エラー, オプションを指定している
-    navigator.geolocation.getCurrentPosition(
-      // posにはブラウザから取得した位置情報が入る
-      (pos) => {
-        // 成功 → 位置情報を状態にセット
-        setPosition([pos.coords.latitude, pos.coords.longitude]);
-        setLoading(false);
-      },
-      // エラー
-      () => {
-        // 権限拒否・タイムアウト・その他エラー → 東京にフォールバック
-        setLoading(false);
-      },
-      // 5秒待っても位置が取得できない場合はエラーとみなす
-      { timeout: 5000 },
-    );
+    const fetchPosition = () => {
+      // 現在地を取得するためのAPI呼び出し. 成功, エラー, オプションを指定
+      navigator.geolocation.getCurrentPosition(
+        // posにはブラウザが返す位置情報が入る
+        (pos) => {
+          setPosition([pos.coords.latitude, pos.coords.longitude]);
+          setLoading(false);
+        },
+        // エラー
+        () => {
+          // 権限拒否・タイムアウト・その他エラー → 東京にフォールバック
+          setLoading(false);
+        },
+        { timeout: 5000 },
+      );
+    };
+
+    // 初回即時取得
+    fetchPosition();
+
+    // 15秒ごとに現在地を更新
+    const intervalId = setInterval(fetchPosition, 15000);
+
+    // コンポーネントのアンマウント時にインターバルを停止
+    return () => {
+      clearInterval(intervalId);
+    };
   }, []);
 
   return { position, loading };
