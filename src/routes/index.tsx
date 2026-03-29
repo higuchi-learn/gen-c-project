@@ -5,5 +5,5 @@ export const Route = createFileRoute('/')({
 });
 
 function IndexPage() {
-  return <SpotDetail/>;
+  return <SpotDetail />;
 }
