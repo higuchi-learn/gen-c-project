@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link, Outlet, useChildMatches } from '@tanstack/react-router';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../features/auth/AuthContext';
 import { LogoutButton } from '../components/ui/LogoutButton';
@@ -13,8 +13,11 @@ function AccountPage() {
   const [profile, setProfile] = useState<any>(null);
   const [stats, setStats] = useState({ discovery_count: 0, spot_count: 0 });
 
+  const childMatches = useChildMatches();
+  const isSubRoute = childMatches.length > 0;
+
   useEffect(() => {
-    if (!user) return;
+    if (!user || isSubRoute) return;
 
     const fetchProfile = async () => {
       const { data } = await supabase.from('users').select('*').eq('id', user.id).single();
@@ -40,9 +43,13 @@ function AccountPage() {
 
     fetchProfile();
     fetchStats();
-  }, [user]);
+  }, [user, isSubRoute]);
 
   if (!user) return <div style={{ padding: '20px', textAlign: 'center' }}>読み込み中...</div>;
+
+  if (isSubRoute) {
+    return <Outlet />;
+  }
 
   return (
     <div style={{ backgroundColor: '#f3f4f6', minHeight: '100vh', padding: '40px 20px', fontFamily: 'sans-serif' }}>
@@ -56,8 +63,8 @@ function AccountPage() {
           margin: '0 auto',
         }}
       >
-        {/* 1. ユーザーアイコン（最上部はキープ） */}
-        <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+        {/* 1. ユーザーアイコン（最上部） */}
+        <div style={{ textAlign: 'center', marginBottom: '16px' }}>
           <img
             src={profile?.icon_image || 'https://via.placeholder.com/120'}
             alt="UserIcon"
@@ -71,27 +78,27 @@ function AccountPage() {
           />
         </div>
 
-        {/* 2. 【入れ替え後】発見数・登録数（実績エリア） */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '32px' }}>
-          <div style={{ padding: '16px', backgroundColor: '#eef2ff', borderRadius: '16px', textAlign: 'center' }}>
-            <div style={{ fontSize: '20px', fontWeight: '800', color: '#4f46e5' }}>{stats.discovery_count}</div>
-            <div style={{ fontSize: '12px', color: '#191cc5', fontWeight: 'bold' }}>発見数</div>
-          </div>
-          <div style={{ padding: '16px', backgroundColor: '#f0fdf4', borderRadius: '16px', textAlign: 'center' }}>
-            <div style={{ fontSize: '20px', fontWeight: '800', color: '#16a34a' }}>{stats.spot_count}</div>
-            <div style={{ fontSize: '12px', color: '#22c55e', fontWeight: 'bold' }}>登録数</div>
-          </div>
-        </div>
-
-        {/* 3. 【入れ替え後】名前・ユーザーネーム */}
-        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+        {/* 2. 名前・ユーザーネーム */}
+        <div style={{ textAlign: 'center', marginBottom: '24px' }}>
           <h2 style={{ fontSize: '22px', fontWeight: '800', margin: '0 0 4px 0', color: '#111827' }}>
             {profile?.display_name || '未設定'}
           </h2>
           <p style={{ color: '#6b7280', fontSize: '14px', margin: 0 }}>@{profile?.username || 'user'}</p>
         </div>
 
-        {/* 4. 【入れ替え後】アカウント情報（メール・都道府県） */}
+        {/* 3. 発見数・登録数（アイコン・名前の下に移動） */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '32px' }}>
+          <div style={{ padding: '16px', backgroundColor: '#eef2ff', borderRadius: '16px', textAlign: 'center' }}>
+            <div style={{ fontSize: '20px', fontWeight: '800', color: '#4f46e5' }}>{stats.discovery_count}</div>
+            <div style={{ fontSize: '12px', color: '#6366f1', fontWeight: 'bold', marginTop: '4px' }}>発見数</div>
+          </div>
+          <div style={{ padding: '16px', backgroundColor: '#f0fdf4', borderRadius: '16px', textAlign: 'center' }}>
+            <div style={{ fontSize: '20px', fontWeight: '800', color: '#16a34a' }}>{stats.spot_count}</div>
+            <div style={{ fontSize: '12px', color: '#22c55e', fontWeight: 'bold', marginTop: '4px' }}>登録数</div>
+          </div>
+        </div>
+
+        {/* 4. アカウント情報（スポットの編集・メール・都道府県） */}
         <div
           style={{
             backgroundColor: '#f9fafb',
@@ -102,12 +109,36 @@ function AccountPage() {
             gap: '12px',
           }}
         >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          {/* スポットの編集（リンク） */}
+          <Link
+            to="/account/spots"
+            style={{
+              textDecoration: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '12px 16px',
+              backgroundColor: '#fff',
+              borderRadius: '12px',
+              color: '#1f2937',
+              fontWeight: 'bold',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <span style={{ fontSize: '14px' }}>スポットの編集</span>
+            </div>
+            <span style={{ color: '#9ca3af' }}>＞</span>
+          </Link>
+          <div style={{ height: '8px' }}></div> {/* 少し隙間をあける */}
+          {/* メールアドレス */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 4px' }}>
             <span style={{ fontSize: '13px', color: '#6b7280', fontWeight: '600' }}>メール</span>
             <span style={{ fontSize: '14px', color: '#1f2937' }}>{user.email}</span>
           </div>
-          <div style={{ height: '1px', backgroundColor: '#e5e7eb' }}></div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ height: '1px', backgroundColor: '#e5e7eb', margin: '4px 0' }}></div>
+          {/* 都道府県 */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 4px' }}>
             <span style={{ fontSize: '13px', color: '#6b7280', fontWeight: '600' }}>都道府県</span>
             <span style={{ fontSize: '14px', color: '#1f2937' }}>{profile?.residence || '未設定'}</span>
           </div>
