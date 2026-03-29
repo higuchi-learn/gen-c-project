@@ -1,3 +1,4 @@
+import React from 'react';
 import styles from './SpotDetail.module.css';
 import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
