@@ -38,6 +38,7 @@ export function MapView() {
         center={position}
         zoom={DEFAULT_ZOOM}
         maxZoom={DEFAULT_ZOOM}
+        bounceAtZoomLimits={false}
         style={{ height: 'calc(100svh - 80px)', width: '100%' }}
       >
         <TileLayer
