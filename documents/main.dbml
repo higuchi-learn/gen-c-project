@@ -1,12 +1,10 @@
 // --- ユーザ ---
 Table users {
   id uuid [primary key]
-  username varchar [note: 'ログインID']
-  display_name varchar [note: '表示名']
-  icon_image varchar [note: 'アイコン画像URL']
-  residence varchar [note: '居住地']
+  username varchar(20) [note: 'ログインID']
+  icon_image text [note: 'アイコン画像URL']
+  residence text [note: '居住地']
   created_at timestamp
-
   note: 'アカウント情報・編集画面の項目'
 }
 
@@ -14,11 +12,11 @@ Table users {
 Table spots {
   id integer [primary key, increment]
   user_id integer [ref: > users.id, note: '投稿者ID（ゲスト投稿ならNULL）']
-  name varchar [note: 'スポットの名前']
-  description text [note: '説明']
+  name varchar(50) [note: 'スポットの名前']
+  description varchar(200) [note: '説明']
   lat decimal [note: '緯度']
   lng decimal [note: '経度']
-  image_url varchar [note: '写真URL']
+  image_url varchar(255) [note: '写真URL']
   created_at timestamp
   updated_at timestamp
   note: 'マップ上に立てるピンと情報管理'
