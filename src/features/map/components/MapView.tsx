@@ -34,10 +34,16 @@ export function MapView() {
 
   return (
     <>
-      <MapContainer center={position} zoom={DEFAULT_ZOOM} style={{ height: 'calc(100svh - 80px)', width: '100%' }}>
+      <MapContainer
+        center={position}
+        zoom={DEFAULT_ZOOM}
+        maxZoom={DEFAULT_ZOOM}
+        style={{ height: 'calc(100svh - 80px)', width: '100%' }}
+      >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          maxZoom={DEFAULT_ZOOM}
         />
         {/* 現在地マーカー（実際の現在地が取得できた場合のみ表示） */}
         {isCurrentLocation && (
