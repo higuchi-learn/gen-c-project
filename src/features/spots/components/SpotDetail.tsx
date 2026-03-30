@@ -20,7 +20,7 @@ export const SpotDetail: React.FC<Props> = ({ spotId, onClose }) => {
 
   return (
     <Drawer.Root
-      defaultOpen={true}
+      open={true}
       onOpenChange={(isOpen) => {
         if (!isOpen) onClose();
       }}

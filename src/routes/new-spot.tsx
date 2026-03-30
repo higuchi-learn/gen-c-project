@@ -22,47 +22,10 @@ function NewSpotPage() {
   }
 
   return (
-    <div style={{ minHeight: '100svh', backgroundColor: '#f8fafc', display: 'flex', flexDirection: 'column' }}>
-      {/* ヘッダー */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '12px',
-          padding: '16px',
-          backgroundColor: '#fff',
-          borderBottom: '1px solid #e5e7eb',
-          flexShrink: 0,
-        }}
-      >
-        <button
-          onClick={() => {
-            // フォームステップの場合はマップ選択に戻る、マップステップの場合はトップへ戻る
-            if (pickedLocation) {
-              setPickedLocation(null);
-            } else {
-              void navigate({ to: '/' });
-            }
-          }}
-          style={{
-            background: 'none',
-            border: 'none',
-            fontSize: '20px',
-            cursor: 'pointer',
-            padding: '4px',
-            lineHeight: 1,
-          }}
-        >
-          ←
-        </button>
-        <h1 style={{ margin: 0, fontSize: '18px', fontWeight: 'bold' }}>スポットを追加</h1>
-      </div>
-
+    <div style={{ height: 'calc(100svh - 80px)', backgroundColor: '#f8fafc', position: 'relative' }}>
       {/* ステップ1: マップで場所を選択 */}
       {!pickedLocation && (
-        <div style={{ flex: 1, position: 'relative' }}>
-          <SpotLocationPicker onConfirm={(lat, lng) => setPickedLocation({ lat, lng })} />
-        </div>
+        <SpotLocationPicker onConfirm={(lat, lng) => setPickedLocation({ lat, lng })} />
       )}
 
       {/* ステップ2: 情報を入力して登録 */}
