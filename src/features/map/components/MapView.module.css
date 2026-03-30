@@ -1,0 +1,63 @@
+.popupOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 24px;
+  pointer-events: auto;
+}
+
+.popup {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px 24px;
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.popupMessage {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.popupActions {
+  display: flex;
+  gap: 12px;
+}
+
+.popupBtnSecondary {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.popupBtnPrimary {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #4f46e5;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.popupBtnPrimary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

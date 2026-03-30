@@ -21,6 +21,7 @@ export function LoginRequiredPopup({ featureName, onBack }: LoginRequiredPopupPr
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 2000,
+        pointerEvents: 'auto',
         padding: '24px',
       }}
     >

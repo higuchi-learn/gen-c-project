@@ -98,19 +98,16 @@ export type Database = {
       discoveries: {
         Row: {
           discovered_at: string | null
-          id: string
           spot_id: string
           user_id: string
         }
         Insert: {
           discovered_at?: string | null
-          id?: string
           spot_id: string
           user_id: string
         }
         Update: {
           discovered_at?: string | null
-          id?: string
           spot_id?: string
           user_id?: string
         }

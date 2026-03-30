@@ -40,7 +40,9 @@ export const AvatarUpload = ({ userId, onUploadComplete, initialUrl = null }: Av
       // 2. アップロードした画像のPublic URLを取得
       const { data } = supabase.storage.from('avatars').getPublicUrl(filePath);
 
-      const publicUrl = data.publicUrl;
+      // キャッシュ対策のためURLにクエリパラメータを付与
+      // 詳しくはcache-bustiong.mdを参照
+      const publicUrl = `${data.publicUrl}?t=${Date.now()}`;
 
       // 3. プレビューを表示し、親コンポーネントにURLを渡す
       setPreviewUrl(publicUrl);

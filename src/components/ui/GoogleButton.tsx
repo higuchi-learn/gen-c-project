@@ -3,6 +3,10 @@ import { Button } from './Button';
 
 export const GoogleButton = () => {
   const handleGoogleLogin = async () => {
+    // ログイン後にリダイレクトさせたいパスがあればセッションストレージに保存しておく
+    const redirectPath = new URLSearchParams(window.location.search).get('redirect');
+    if (redirectPath) sessionStorage.setItem('postLoginRedirect', redirectPath);
+
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {

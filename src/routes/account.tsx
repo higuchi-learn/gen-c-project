@@ -73,7 +73,10 @@ function AccountPage() {
         {/* 1. ユーザーアイコン（最上部） */}
         <div style={{ textAlign: 'center', marginBottom: '16px' }}>
           <img
-            src={profile?.icon_image || 'https://via.placeholder.com/120'}
+            src={profile?.icon_image ?? `data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#d1d5db"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>')}`}
+            onError={(e) => {
+              e.currentTarget.src = `data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#d1d5db"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>')}`;
+            }}
             alt="UserIcon"
             style={{
               width: '110px',

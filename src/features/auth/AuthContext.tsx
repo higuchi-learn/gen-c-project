@@ -54,8 +54,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (!data?.username) {
           void navigate({ to: '/profile-setup' });
         } else {
+          // ログイン前にリダイレクトさせたいパスが指定されていればそこへ、なければトップへ遷移
+          const storedRedirect = sessionStorage.getItem('postLoginRedirect');
+          // ログイン後にリダイレクトさせたいパスがあればセッションストレージに保存しておいたものを読み取る
+          sessionStorage.removeItem('postLoginRedirect');
           const search = router.state.location.search as { redirect?: string };
-          void navigate({ to: search.redirect ?? '/' });
+          void navigate({ to: storedRedirect ?? search.redirect ?? '/' });
         }
       }
     });
