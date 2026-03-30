@@ -85,12 +85,11 @@ function AccountPage() {
           />
         </div>
 
-        {/* 2. 名前・ユーザーネーム */}
+        {/* 2. ユーザーネーム */}
         <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-          <h2 style={{ fontSize: '22px', fontWeight: '800', margin: '0 0 4px 0', color: '#111827' }}>
-            {profile?.display_name || '未設定'}
+          <h2 style={{ fontSize: '22px', fontWeight: '800', margin: 0, color: '#111827' }}>
+            {profile?.username || '未設定'}
           </h2>
-          <p style={{ color: '#6b7280', fontSize: '14px', margin: 0 }}>@{profile?.username || 'user'}</p>
         </div>
 
         {/* 3. 発見数・登録数（アイコン・名前の下に移動） */}
@@ -116,6 +115,25 @@ function AccountPage() {
             gap: '12px',
           }}
         >
+          {/* プロフィール情報の編集（リンク） */}
+          <Link
+            to="/profile-setup"
+            style={{
+              textDecoration: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '12px 16px',
+              backgroundColor: '#fff',
+              borderRadius: '12px',
+              color: '#1f2937',
+              fontWeight: 'bold',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+            }}
+          >
+            <span style={{ fontSize: '14px' }}>プロフィール設定</span>
+            <span style={{ color: '#9ca3af' }}>＞</span>
+          </Link>
           {/* スポットの編集（リンク） */}
           <Link
             to="/account/spots"
@@ -132,9 +150,7 @@ function AccountPage() {
               boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span style={{ fontSize: '14px' }}>スポットの編集</span>
-            </div>
+            <span style={{ fontSize: '14px' }}>スポットの編集</span>
             <span style={{ color: '#9ca3af' }}>＞</span>
           </Link>
           <div style={{ height: '8px' }}></div> {/* 少し隙間をあける */}

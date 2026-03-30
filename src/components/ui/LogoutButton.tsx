@@ -20,7 +20,7 @@ export const LogoutButton = () => {
   };
 
   return (
-    <Button onClick={() => void onLogout()} variant="secondary" style={{ color: '#ef4444', borderColor: '#ef4444' }}>
+    <Button onClick={() => void onLogout()} style={{ backgroundColor: '#ef4444', color: '#fff' }}>
       ログアウト
     </Button>
   );

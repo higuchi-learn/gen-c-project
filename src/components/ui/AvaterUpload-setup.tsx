@@ -5,11 +5,12 @@ import { supabase } from '../../lib/supabase';
 interface AvatarUploadProps {
   userId: string;
   onUploadComplete: (url: string) => void; // アップロード完了時にURLを親に渡す
+  initialUrl?: string | null;
 }
 
-export const AvatarUpload = ({ userId, onUploadComplete }: AvatarUploadProps) => {
+export const AvatarUpload = ({ userId, onUploadComplete, initialUrl = null }: AvatarUploadProps) => {
   const [uploading, setUploading] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(initialUrl);
 
   const handleUpload = async (event: ChangeEvent<HTMLInputElement>) => {
     try {

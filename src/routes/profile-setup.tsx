@@ -36,19 +36,36 @@ export const Route = createFileRoute('/profile-setup')({
 function ProfileSetupPage() {
   const [username, setUsername] = useState('');
   const [residence, setResidence] = useState('');
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null); // 追加：画像のURL
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
+  const [isExistingProfile, setIsExistingProfile] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const navigate = useNavigate();
 
-  // 初回レンダリング時に現在のユーザーIDを取得
+  // 初回レンダリング時にユーザーIDと既存プロフィールを取得してフォームにセット
   useEffect(() => {
-    void supabase.auth.getUser().then(({ data: { user } }) => {
-      if (user) {
-        setUserId(user.id);
+    const load = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) return;
+      setUserId(user.id);
+
+      const { data: profile } = await supabase
+        .from('users')
+        .select('username, icon_image, residence')
+        .eq('id', user.id)
+        .single();
+
+      if (profile?.username) {
+        setIsExistingProfile(true);
+        setUsername((profile.username as string) ?? '');
+        setAvatarUrl((profile.icon_image as string | null) ?? null);
+        setResidence((profile.residence as string) ?? '');
       }
-    });
+    };
+    void load();
   }, []);
 
   const handleUpdate = async (e: React.SyntheticEvent) => {
@@ -91,6 +108,9 @@ function ProfileSetupPage() {
     // エラーがあればアラートで表示、なければ成功メッセージを表示してトップページへ遷移
     if (error) {
       alert('エラー: ' + error.message);
+    } else if (isExistingProfile) {
+      alert('プロフィールを更新しました！');
+      void navigate({ to: '/account' });
     } else {
       alert('プロフィールを登録しました！');
       void navigate({ to: '/' });
@@ -113,7 +133,14 @@ function ProfileSetupPage() {
       <Card>
         <form onSubmit={(e) => void handleUpdate(e)} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
           {/* 追加：画像アップロード UI */}
-          {userId && <AvatarUpload userId={userId} onUploadComplete={(url) => setAvatarUrl(url)} />}
+          {userId && (
+            <AvatarUpload
+              key={avatarUrl ?? 'no-avatar'}
+              userId={userId}
+              initialUrl={avatarUrl}
+              onUploadComplete={(url) => setAvatarUrl(url)}
+            />
+          )}
 
           <p style={{ fontSize: '13px', color: '#666', marginBottom: '10px', textAlign: 'center' }}>
             アプリで使う情報を登録してください。
@@ -149,9 +176,11 @@ function ProfileSetupPage() {
                 cursor: 'pointer',
               }}
             >
-              <option value="">選択してください</option>
+              <option value="" style={{ color: '#9ca3af' }}>
+                選択してください
+              </option>
               {PREFECTURES.map((pref) => (
-                <option key={pref} value={pref}>
+                <option key={pref} value={pref} style={{ color: '#111827' }}>
                   {pref}
                 </option>
               ))}
@@ -162,7 +191,7 @@ function ProfileSetupPage() {
           </div>
 
           <Button type="submit" disabled={loading} style={{ marginTop: '10px' }}>
-            {loading ? '保存中...' : '確定してはじめる'}
+            {loading ? '保存中...' : isExistingProfile ? 'プロフィールを更新' : '確定してはじめる'}
           </Button>
         </form>
       </Card>
